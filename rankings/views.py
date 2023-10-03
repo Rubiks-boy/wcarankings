@@ -1,6 +1,9 @@
 from django.http import HttpResponse
+from django.core import serializers
+import threading
 
-from .models import SingleRank
+from rankings.updatedb import perform_update
+from rankings.models import SingleRank
 
 
 def index(request):
@@ -8,6 +11,14 @@ def index(request):
 
 
 def db(request):
-    ranking = SingleRank.objects.get(id=1)
+    rankings = serializers.serialize("json", SingleRank.objects.all()[:100])
 
-    return HttpResponse(ranking)
+    return HttpResponse({rankings: rankings}, content_type="application/json")
+
+
+def update(request):
+    t_single = threading.Thread(target=perform_update, args=["SingleRank"])
+    t_single.setDaemon(True)
+    t_single.start()
+
+    return HttpResponse("cool beans")
