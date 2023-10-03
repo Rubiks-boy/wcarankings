@@ -3,7 +3,7 @@ from django.db import models
 
 class SingleRank(models.Model):
     id = models.BigAutoField(primary_key=True)
-    personId = models.CharField(max_length=8)
+    personId = models.CharField(max_length=12)
     eventId = models.CharField(max_length=8)
     best = models.IntegerField()
     worldRank = models.IntegerField()
@@ -16,7 +16,7 @@ class SingleRank(models.Model):
 
 class AverageRank(models.Model):
     id = models.BigAutoField(primary_key=True)
-    personId = models.CharField(max_length=8)
+    personId = models.CharField(max_length=12)
     eventId = models.CharField(max_length=8)
     best = models.IntegerField()
     worldRank = models.IntegerField()
