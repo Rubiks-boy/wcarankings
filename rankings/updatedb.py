@@ -4,7 +4,7 @@ import os
 import re
 from zipfile import ZipFile
 
-from .models import SingleRank
+from .models import SingleRank, AverageRank
 
 BATCH_SIZE = 1000
 EXPORT_URL = "https://www.worldcubeassociation.org/export/results/WCA_export.tsv.zip"
@@ -25,7 +25,7 @@ def unzip_export():
 def import_tsv(filename: str, type: str):
     tsv = pd.read_csv(filename, sep="\t", low_memory=False)
 
-    Rank = SingleRank if type == "SingleRank" else SingleRank
+    Rank = SingleRank if type == "SingleRank" else AverageRank
 
     Rank.objects.all().delete()
 
@@ -98,4 +98,4 @@ def perform_update(type: str):
 
 def update_all():
     perform_update("SingleRank")
-    # perform_update("AverageRank")
+    perform_update("AverageRank")

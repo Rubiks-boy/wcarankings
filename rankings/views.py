@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.core import serializers
 import threading
 
-from rankings.updatedb import perform_update
+from rankings.updatedb import update_all
 from rankings.models import SingleRank
 
 
@@ -17,7 +17,7 @@ def db(request):
 
 
 def update(request):
-    t_single = threading.Thread(target=perform_update, args=["SingleRank"])
+    t_single = threading.Thread(target=update_all)
     t_single.setDaemon(True)
     t_single.start()
 
