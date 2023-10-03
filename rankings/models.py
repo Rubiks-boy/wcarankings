@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class SingleRank(models.Model):
     id = models.BigAutoField(primary_key=True)
     personId = models.CharField(max_length=8)
