@@ -5,7 +5,8 @@
 .entry {
   font-family: "Fira Sans", sans-serif;
   font-weight: 300;
-  border: 1px solid #aaa;
+  background-color: #fff;
+  border: 1px solid #ccc;
   padding: 1em;
   border-radius: 0.7em;
   display: flex;
@@ -65,7 +66,7 @@
 }
 
 .loaderId {
-  width: 25ch;
+  width: 28ch;
 }
 
 .loaderBest {

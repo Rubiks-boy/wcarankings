@@ -44,7 +44,11 @@ export const Chooser = ({
           value={eventId}
         >
           {Object.entries(EVENTS_MAP).map(([eventId, eventName]) => {
-            return <option value={eventId}>{eventName}</option>;
+            return (
+              <option key={eventId} value={eventId}>
+                {eventName}
+              </option>
+            );
           })}
         </select>
         <select
