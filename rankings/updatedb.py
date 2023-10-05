@@ -4,9 +4,9 @@ import os
 import re
 from zipfile import ZipFile
 
-from .models import SingleRank, AverageRank
+from .models import SingleRank, AverageRank, Person
 
-BATCH_SIZE = 1000
+BATCH_SIZE = 10000
 EXPORT_URL = "https://www.worldcubeassociation.org/export/results/WCA_export.tsv.zip"
 ZIP_FNAME = "./export.zip"
 TMP_DIR = "./tmp"
@@ -22,12 +22,40 @@ def unzip_export():
         zip_ref.extractall(TMP_DIR)
 
 
-def import_tsv(filename: str, type: str):
+def delete_the_world():
+    SingleRank.objects.all().delete()
+    AverageRank.objects.all().delete()
+    Person.objects.all().delete()
+
+
+def import_persons(filename: str):
+    tsv = pd.read_csv(filename, sep="\t", low_memory=False)
+
+    persons = []
+    i = 0
+
+    for [_, p] in tsv.iterrows():
+        if len(persons) >= BATCH_SIZE:
+            Person.objects.bulk_create(persons)
+            persons = []
+            print("Bulk create", i)
+
+        if p.subid > 1:
+            continue
+
+        person = Person(id=p.id, name=p.name, countryId=p.countryId, gender=p.gender)
+        persons.append(person)
+        i += 1
+
+    Person.objects.bulk_create(persons)
+
+    print("Finished update.", filename, "Person")
+
+
+def import_rank_tsv(filename: str, Rank: str):
     tsv = pd.read_csv(filename, sep="\t", low_memory=False)
 
     Rank = SingleRank if type == "SingleRank" else AverageRank
-
-    Rank.objects.all().delete()
 
     ranks = []
     i = 0
@@ -39,7 +67,7 @@ def import_tsv(filename: str, type: str):
             print("Bulk create", i)
 
         rank = Rank(
-            personId=r.personId,
+            person_id=r.personId,
             eventId=r.eventId,
             best=r.best,
             worldRank=r.worldRank,
@@ -72,8 +100,8 @@ def cleanup_tmp_files():
         os.rmdir(TMP_DIR)
 
 
-def perform_update(type: str):
-    print("Beginning update...", type)
+def update_all():
+    print("Beginning update...")
 
     print("Cleaning up existing files...")
     cleanup_tmp_files()
@@ -84,18 +112,19 @@ def perform_update(type: str):
     print("Upzipping results export...")
     unzip_export()
 
-    print("Wiping db and importing new rankings...")
-    tsv_name = (
-        "WCA_export_RanksSingle" if type == "SingleRank" else "WCA_export_RanksAverage"
-    )
-    import_tsv(f"{TMP_DIR}/{tsv_name}.tsv", type)
+    print("Wiping db...")
+    delete_the_world()
+
+    print("Importing new persons...")
+    import_persons(f"{TMP_DIR}/WCA_export_Persons.tsv")
+
+    print("Importing new single rankings...")
+    import_rank_tsv(f"{TMP_DIR}/WCA_export_RanksSingle.tsv", "SingleRank")
+
+    print("Importing new average rankings...")
+    import_rank_tsv(f"{TMP_DIR}/WCA_export_RanksAverage.tsv", "AverageRank")
 
     print("Cleaning up...")
     cleanup_tmp_files()
 
-    print("Update complete.", type)
-
-
-def update_all():
-    perform_update("SingleRank")
-    perform_update("AverageRank")
+    print("Update complete.")
