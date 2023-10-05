@@ -52,7 +52,7 @@ def import_persons(filename: str):
     print("Finished update.", filename, "Person")
 
 
-def import_rank_tsv(filename: str, Rank: str):
+def import_rank_tsv(filename: str, type: str):
     tsv = pd.read_csv(filename, sep="\t", low_memory=False)
 
     Rank = SingleRank if type == "SingleRank" else AverageRank
