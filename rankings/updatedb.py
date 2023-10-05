@@ -29,7 +29,14 @@ def delete_the_world():
 
 
 def import_persons(filename: str):
-    tsv = pd.read_csv(filename, sep="\t", low_memory=False)
+    tsv = pd.read_csv(
+        filename,
+        sep="\t",
+        low_memory=False,
+        # "name" gives the row index :/ rename it to "full_name"
+        names=["subid", "full_name", "countryId", "gender", "id"],
+        header=0,
+    )
 
     persons = []
     i = 0
@@ -43,7 +50,9 @@ def import_persons(filename: str):
         if p.subid > 1:
             continue
 
-        person = Person(id=p.id, name=p.name, countryId=p.countryId, gender=p.gender)
+        person = Person(
+            id=p.id, name=p.full_name, countryId=p.countryId, gender=p.gender
+        )
         persons.append(person)
         i += 1
 
