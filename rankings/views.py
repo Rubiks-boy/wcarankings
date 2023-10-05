@@ -5,33 +5,33 @@ import threading
 
 from rankings.updatedb import update_all
 from rankings.models import SingleRank, AverageRank
+from rest_framework import generics
 
-PAGE_SIZE = 1000
-
-
-def rankings(RankModel, request):
-    eventId = request.GET.get("eventId")
-    if eventId is None:
-        eventId = "333"
-
-    page = request.GET.get("page")
-    if page is None:
-        page = 1
-
-    all_pages = RankModel.objects.filter(eventId=eventId)
-    paginator = Paginator(all_pages, PAGE_SIZE)
-    page = paginator.get_page(page)
-    rankings = serialize("json", page)
-
-    return HttpResponse({rankings: rankings}, content_type="application/json")
+from rankings.serializers import RankSerializer, RankPagination
 
 
-def single(request):
-    return rankings(SingleRank, request)
+class SingleRankingsList(generics.ListAPIView):
+    serializer_class = RankSerializer
+    pagination_class = RankPagination
+
+    def get_queryset(self):
+        eventId = self.request.query_params.get("eventId")
+        if eventId is None:
+            eventId = "333"
+
+        return SingleRank.objects.filter(eventId=eventId)
 
 
-def average(request):
-    return rankings(AverageRank, request)
+class AverageRankingsList(generics.ListAPIView):
+    serializer_class = RankSerializer
+    pagination_class = RankPagination
+
+    def get_queryset(self):
+        eventId = self.request.query_params.get("eventId")
+        if eventId is None:
+            eventId = "333"
+
+        return AverageRank.objects.filter(eventId=eventId)
 
 
 def update(_):

@@ -1,9 +1,10 @@
 from django.urls import path
 
-from . import views
+from rankings.views import update, SingleRankingsList, AverageRankingsList
+
 
 urlpatterns = [
-    path("single", views.single, name="single"),
-    path("average", views.average, name="average"),
-    path("update", views.update, name="update"),
+    path("single", SingleRankingsList.as_view()),
+    path("average", AverageRankingsList.as_view()),
+    path("update", update, name="update"),
 ]

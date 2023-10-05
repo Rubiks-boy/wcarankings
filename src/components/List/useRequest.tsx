@@ -3,7 +3,10 @@ import { Fields } from "./Entry";
 import { api } from "../../api";
 
 const DEFAULT_ENTRIES = [...Array(100).keys()].map(() => ({
-  person: "-",
+  person: {
+    id: "-",
+    name: "-",
+  },
   best: 0,
 }));
 
@@ -15,8 +18,9 @@ export const useRequest = (eventId: string) => {
     setLoading(true);
 
     api.get(`/rankings/single?eventId=${eventId}`).then((resp) => {
+      console.log(resp.data);
       setLoading(false);
-      setEntries(resp.data.map(({ fields }: { fields: Fields }) => fields));
+      setEntries(resp.data.results);
     });
   }, [eventId]);
 

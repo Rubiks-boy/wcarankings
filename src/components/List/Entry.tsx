@@ -1,7 +1,10 @@
 import classNames from "classnames";
 
 export type Fields = {
-  person: string;
+  person: {
+    id: string;
+    name: string;
+  };
   best: number;
 };
 
@@ -14,7 +17,6 @@ export const Entry = ({
   loading: boolean;
   index: number;
 }) => {
-  const { person, best } = fields ?? {};
   return (
     <li
       className={classNames("entry", { loading })}
@@ -29,9 +31,11 @@ export const Entry = ({
       </div>
       <div className="entry--content">
         <span>{index}</span>
-        <span>{person}</span>
+        <span>
+          {fields?.person.name} ({fields?.person.id})
+        </span>
       </div>
-      <div>{(best ?? 0) / 100}</div>
+      <div>{((fields?.best ?? 0) / 100).toFixed(2)}</div>
     </li>
   );
 };
