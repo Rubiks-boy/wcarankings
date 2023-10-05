@@ -4,6 +4,8 @@ import threading
 from rankings.updatedb import update_all
 from rankings.models import SingleRank, AverageRank
 from rest_framework import generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from rankings.serializers import RankSerializer, RankPagination
 
@@ -32,6 +34,8 @@ class AverageRankingsList(generics.ListAPIView):
         return AverageRank.objects.filter(eventId=eventId)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def update(_):
     t_single = threading.Thread(target=update_all)
     t_single.setDaemon(True)
