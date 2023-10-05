@@ -17,5 +17,5 @@ class RankSerializer(serializers.Serializer):
 
 
 class RankPagination(pagination.PageNumberPagination):
-    page_size = 500
+    page_size = 100
     page_query_param = "p"
