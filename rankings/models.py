@@ -5,7 +5,7 @@ class Person(models.Model):
     id = models.CharField(max_length=12, primary_key=True)
     name = models.CharField(max_length=255)
     countryId = models.CharField(max_length=255)
-    gender = models.CharField(max_length=1)
+    gender = models.CharField(max_length=2)
 
 
 class SingleRank(models.Model):
