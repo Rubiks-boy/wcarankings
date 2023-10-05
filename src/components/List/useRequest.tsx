@@ -3,7 +3,7 @@ import { Fields } from "./Entry";
 import { api } from "../../api";
 
 const DEFAULT_ENTRIES = [...Array(100).keys()].map(() => ({
-  personId: "-",
+  person: "-",
   best: 0,
 }));
 

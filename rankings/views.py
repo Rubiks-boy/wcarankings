@@ -20,7 +20,8 @@ def rankings(RankModel, request):
 
     all_pages = RankModel.objects.filter(eventId=eventId)
     paginator = Paginator(all_pages, PAGE_SIZE)
-    rankings = serialize("json", paginator.get_page(page))
+    page = paginator.get_page(page)
+    rankings = serialize("json", page)
 
     return HttpResponse({rankings: rankings}, content_type="application/json")
 

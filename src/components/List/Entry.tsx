@@ -1,18 +1,18 @@
 export type Fields = {
-  personId: string;
+  person: string;
   best: number;
 };
 
 export const Entry = ({ fields }: { fields?: Fields }) => {
-  const { personId, best } = fields ?? {};
+  const { person, best } = fields ?? {};
   return (
     <li className="entry">
       <div className="loader">
         <div className="loaderId"></div>
         <div className="loaderBest"></div>
       </div>
-      <div>{personId}</div>
-      <div>{best}</div>
+      <div>{person}</div>
+      <div>{(best ?? 0) / 100}</div>
     </li>
   );
 };
