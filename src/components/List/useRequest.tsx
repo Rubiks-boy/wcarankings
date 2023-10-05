@@ -7,10 +7,15 @@ const DEFAULT_ENTRIES = [...Array(100).keys()].map(() => ({
     id: "-",
     name: "-",
   },
+  worldRank: 1,
   best: 0,
 }));
 
-export const useRequest = (eventId: string, isSingle: boolean) => {
+export const useRequest = (
+  eventId: string,
+  isSingle: boolean,
+  page: number
+) => {
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<Array<Fields>>(DEFAULT_ENTRIES);
 
@@ -19,12 +24,12 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
 
     const type = isSingle ? "single" : "average";
 
-    api.get(`/rankings/${type}?eventId=${eventId}`).then((resp) => {
+    api.get(`/rankings/${type}?eventId=${eventId}&p=${page}`).then((resp) => {
       console.log(resp.data);
       setLoading(false);
       setEntries(resp.data.results);
     });
-  }, [eventId, isSingle]);
+  }, [eventId, isSingle, page]);
 
   return {
     loading: loading || !entries.length,

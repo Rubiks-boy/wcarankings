@@ -6,15 +6,18 @@ export type Fields = {
     name: string;
   };
   best: number;
+  worldRank: number;
 };
 
 export const Entry = ({
   fields,
   loading,
+  rank,
   index,
 }: {
   fields?: Fields;
   loading: boolean;
+  rank: number;
   index: number;
 }) => {
   return (
@@ -30,7 +33,7 @@ export const Entry = ({
         <div className="loaderBest"></div>
       </div>
       <div className="entryContent">
-        <span className="rank">{index + 1}</span>
+        <span className="rank">{rank}</span>
         <span>
           {fields?.person.name} ({fields?.person.id})
         </span>

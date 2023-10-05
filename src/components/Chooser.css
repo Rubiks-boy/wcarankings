@@ -1,5 +1,9 @@
 .chooser {
+  display: flex;
   padding-bottom: 1em;
+  justify-content: space-between;
+}
+.chooser > div {
   display: flex;
   gap: 1em;
 }
@@ -7,4 +11,22 @@
 .chooser select {
   padding: 0.5em;
   border-radius: 0.3em;
+}
+
+.chooser button {
+  width: 7em;
+  border-radius: 0.8em;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.chooser button:hover {
+  background-color: #eee;
+}
+
+.chooser button:disabled {
+  border: 1px solid #eee;
+  pointer-events: none;
 }
