@@ -1,6 +1,4 @@
 from django.http import HttpResponse
-from django.core.serializers import serialize
-from django.core.paginator import Paginator
 import threading
 
 from rankings.updatedb import update_all

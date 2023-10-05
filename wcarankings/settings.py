@@ -96,7 +96,7 @@ ROOT_URLCONF = "wcarankings.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "dist"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -173,8 +173,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "dist/assets"
+STATIC_URL = "assets/"
 
 STORAGES = {
     # Enable WhiteNoise's GZip and Brotli compression of static assets:
