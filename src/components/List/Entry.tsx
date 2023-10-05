@@ -30,7 +30,7 @@ export const Entry = ({
         <div className="loaderBest"></div>
       </div>
       <div className="entryContent">
-        <span>{index}</span>
+        <span className="rank">{index + 1}</span>
         <span>
           {fields?.person.name} ({fields?.person.id})
         </span>

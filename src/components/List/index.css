@@ -38,10 +38,16 @@
   }
 }
 
-.entryContent,
 .loaderContent {
   display: flex;
-  gap: 2em;
+  gap: 3em;
+}
+
+.entryContent .rank {
+  display: inline-block;
+  position: relative;
+  min-width: 2.5em;
+  margin-right: 0.5em;
 }
 
 .loaderRank,
