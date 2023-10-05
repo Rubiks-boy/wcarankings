@@ -1,6 +1,5 @@
 .list {
   --transition-delay: 0;
-  padding-inline: 1em;
 }
 
 .entry {
@@ -39,12 +38,10 @@
   }
 }
 
+.entryContent,
 .loaderContent {
   display: flex;
-}
-
-.loaderContent > * {
-  margin-right: 1em;
+  gap: 2em;
 }
 
 .loaderRank,
@@ -78,6 +75,6 @@
   opacity: 1;
 }
 
-.entry--content span {
-  padding-right: 2em;
+.loading .entryContent {
+  opacity: 0;
 }

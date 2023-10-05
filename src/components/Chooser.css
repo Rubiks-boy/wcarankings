@@ -1,0 +1,9 @@
+.chooser {
+  padding-bottom: 1em;
+  display: flex;
+  gap: 1em;
+}
+
+.chooser select {
+  padding: 0.5em;
+}

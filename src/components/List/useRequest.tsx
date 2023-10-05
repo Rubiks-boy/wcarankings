@@ -10,22 +10,24 @@ const DEFAULT_ENTRIES = [...Array(100).keys()].map(() => ({
   best: 0,
 }));
 
-export const useRequest = (eventId: string) => {
+export const useRequest = (eventId: string, isSingle: boolean) => {
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<Array<Fields>>(DEFAULT_ENTRIES);
 
   useEffect(() => {
     setLoading(true);
 
-    api.get(`/rankings/single?eventId=${eventId}`).then((resp) => {
+    const type = isSingle ? "single" : "average";
+
+    api.get(`/rankings/${type}?eventId=${eventId}`).then((resp) => {
       console.log(resp.data);
       setLoading(false);
       setEntries(resp.data.results);
     });
-  }, [eventId]);
+  }, [eventId, isSingle]);
 
   return {
     loading: loading || !entries.length,
-    entries: entries.length ? entries : DEFAULT_ENTRIES,
+    entries: !loading && entries.length ? entries : DEFAULT_ENTRIES,
   };
 };

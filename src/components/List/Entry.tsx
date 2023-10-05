@@ -24,18 +24,20 @@ export const Entry = ({
     >
       <div className="loader">
         <div className="loaderContent">
-          <div className="loaderRank"></div>
-          <div className="loaderId"></div>
+          <span className="loaderRank"></span>
+          <span className="loaderId"></span>
         </div>
         <div className="loaderBest"></div>
       </div>
-      <div className="entry--content">
+      <div className="entryContent">
         <span>{index}</span>
         <span>
           {fields?.person.name} ({fields?.person.id})
         </span>
       </div>
-      <div>{((fields?.best ?? 0) / 100).toFixed(2)}</div>
+      <div className="entryContent">
+        {((fields?.best ?? 0) / 100).toFixed(2)}
+      </div>
     </li>
   );
 };
