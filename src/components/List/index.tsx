@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { Entry } from "./Entry";
 import { useRequest } from "./useRequest";
 
@@ -8,8 +7,8 @@ export const List = ({ eventId }: { eventId: string }) => {
   const { loading, entries } = useRequest(eventId);
 
   const rows = entries.map((fields, i) => {
-    return <Entry key={i} fields={fields} />;
+    return <Entry key={i} index={i} fields={fields} loading={loading} />;
   });
 
-  return <ol className={classNames("list", { loading })}>{rows}</ol>;
+  return <ol className="list">{rows}</ol>;
 };

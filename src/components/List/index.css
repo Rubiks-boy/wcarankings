@@ -1,4 +1,5 @@
 .list {
+  --transition-delay: 0;
   padding-inline: 1em;
 }
 
@@ -13,6 +14,7 @@
   margin-bottom: 0.5em;
   position: relative;
   transition: transform 150ms ease, border 300ms ease;
+  transition-delay: var(--transition-delay);
 }
 
 .loader {
@@ -24,6 +26,7 @@
   justify-content: space-between;
   padding: 1em;
   transition: opacity 300ms ease;
+  transition-delay: var(--transition-delay);
 }
 
 @keyframes loadingPulse {
@@ -36,13 +39,26 @@
   }
 }
 
+.loaderContent {
+  display: flex;
+}
+
+.loaderContent > * {
+  margin-right: 1em;
+}
+
+.loaderRank,
 .loaderId,
 .loaderBest {
+  height: 1em;
   background-color: #ccc;
   border-radius: 0.5em;
-  height: 1em;
   position: relative;
   animation: loadingPulse 1000ms ease infinite alternate;
+}
+
+.loaderRank {
+  width: 2ch;
 }
 
 .loaderId {
@@ -53,11 +69,15 @@
   width: 6ch;
 }
 
-.loading .entry {
+.entry.loading {
   transform: scale(95%, 85%);
   border: 1px solid #ccc;
 }
 
 .loading .loader {
   opacity: 1;
+}
+
+.entry--content span {
+  padding-right: 2em;
 }
