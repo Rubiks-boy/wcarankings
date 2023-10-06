@@ -23,14 +23,14 @@ export const Entry = ({
   return (
     <li
       className={classNames("entry", { loading })}
-      style={{ "--transition-delay": `${index * 10}ms` } as React.CSSProperties}
+      style={{ "--transition-delay": `${index * 8}ms` } as React.CSSProperties}
     >
       <div className="loader">
         <div className="loaderContent">
-          <span className="loaderRank"></span>
-          <span className="loaderId"></span>
+          <span className="loaderRank blob"></span>
+          <span className="loaderId blob"></span>
         </div>
-        <div className="loaderBest"></div>
+        <div className="loaderBest blob"></div>
       </div>
       <div className="entryContent">
         <span className="rank">{rank}</span>

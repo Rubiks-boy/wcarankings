@@ -26,5 +26,9 @@ export const List = ({
     );
   });
 
-  return <ol className="list">{rows}</ol>;
+  return (
+    <div className="listWrapper">
+      <ol className="list">{rows}</ol>
+    </div>
+  );
 };

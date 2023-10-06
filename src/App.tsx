@@ -14,16 +14,18 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <Chooser
-        eventId={eventId}
-        setEventId={setEventId}
-        isSingle={isSingle}
-        toggleSingle={toggleSingle}
-        page={page}
-        prevPage={() => setPage(page - 1)}
-        nextPage={() => setPage(page + 1)}
-      />
-      <List eventId={eventId} isSingle={isSingle} page={page} />
+      <main>
+        <Chooser
+          eventId={eventId}
+          setEventId={setEventId}
+          isSingle={isSingle}
+          toggleSingle={toggleSingle}
+          page={page}
+          prevPage={() => setPage(page - 1)}
+          nextPage={() => setPage(page + 1)}
+        />
+        <List eventId={eventId} isSingle={isSingle} page={page} />
+      </main>
     </div>
   );
 }

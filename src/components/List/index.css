@@ -1,4 +1,11 @@
+.listWrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .list {
+  max-width: 1000px;
+  width: 100%;
   --transition-delay: 0;
 }
 
@@ -13,8 +20,12 @@
   justify-content: space-between;
   margin-bottom: 0.5em;
   position: relative;
-  transition: transform 150ms ease, border 300ms ease;
+  transition: transform 100ms ease;
   transition-delay: var(--transition-delay);
+}
+
+.entry.loading {
+  transform: scale(96%, 85%);
 }
 
 .loader {
@@ -23,6 +34,7 @@
   inset: 0;
   display: flex;
   align-items: center;
+  gap: 2em;
   justify-content: space-between;
   padding: 1em;
   transition: opacity 300ms ease;
@@ -41,7 +53,8 @@
 
 .loaderContent {
   display: flex;
-  gap: 3em;
+  gap: 2em;
+  width: 400px;
 }
 
 .entryContent .rank {
@@ -51,37 +64,40 @@
   margin-right: 0.5em;
 }
 
-.loaderRank,
-.loaderId,
-.loaderBest {
+.loading .blob {
+  animation: loadingPulse 1000ms ease infinite alternate;
+  transform: scale(100%, 100%);
+}
+
+.blob {
   height: 1em;
   background-color: #ccc;
   border-radius: 0.5em;
   position: relative;
-  animation: loadingPulse 1000ms ease infinite alternate;
+  transform: scale(110%, 110%);
+  transition: transform 150ms ease;
+  transition-delay: var(--transition-delay);
 }
 
 .loaderRank {
-  width: 2ch;
+  width: 4ch;
 }
-
 .loaderId {
-  width: 28ch;
+  width: 100%;
 }
-
 .loaderBest {
   width: 6ch;
-}
-
-.entry.loading {
-  transform: scale(95%, 85%);
-  border: 1px solid #ccc;
 }
 
 .loading .loader {
   opacity: 1;
 }
-
 .loading .entryContent {
   opacity: 0;
+}
+
+.entry:not(.loading) .entryContent,
+.loading .loader {
+  transition: opacity 150ms ease;
+  transition-delay: var(--transition-delay);
 }
