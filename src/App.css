@@ -8,6 +8,13 @@
   z-index: 1;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  padding-bottom: 1em;
+  column-gap: 1em;
+}
+
+.header > * {
+  margin: 0.5em 0;
 }
 
 .header h1 {

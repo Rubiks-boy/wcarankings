@@ -35,9 +35,8 @@ export const Entry = ({
       </div>
       <div className="entryContent">
         <span className="rank">{rank}</span>
-        <span>
-          {fields?.person.name} ({fields?.person.id})
-        </span>
+        <span>{fields?.person.name}</span>
+        <span className="wcaId">({fields?.person.id})</span>
       </div>
       <div className="entryContent">
         {((fields?.best ?? 0) / 100).toFixed(2)}
