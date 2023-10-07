@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import React from "react";
 
 export type Fields = {
   person: {
@@ -7,22 +8,21 @@ export type Fields = {
   };
   best: number;
   worldRank: number;
+  loading?: boolean;
 };
 
 export const Entry = ({
   fields,
-  loading,
   rank,
   index,
 }: {
   fields?: Fields;
-  loading: boolean;
   rank: number;
   index: number;
 }) => {
   return (
     <li
-      className={classNames("entry", { loading })}
+      className={classNames("entry", { loading: !!fields?.loading })}
       style={{ "--transition-delay": `${index * 8}ms` } as React.CSSProperties}
     >
       <div className="loader">

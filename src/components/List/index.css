@@ -1,11 +1,13 @@
 .listWrapper {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .list {
   max-width: 1000px;
   width: 100%;
+  line-height: 1;
   --transition-delay: 0;
 }
 
@@ -19,7 +21,6 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5em;
-  position: relative;
   transition: transform 100ms ease;
   transition-delay: var(--transition-delay);
 }
@@ -100,4 +101,11 @@
 .loading .loader {
   transition: opacity 150ms ease;
   transition-delay: var(--transition-delay);
+}
+
+.triggerLoad {
+  height: calc(50 * (3.5em + 2px));
+  position: absolute;
+  inset-inline: 50%;
+  bottom: 0;
 }

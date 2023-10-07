@@ -1,38 +1,40 @@
-import { useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Fields } from "./Entry";
 import { api } from "../../api";
 
-const DEFAULT_ENTRIES = [...Array(100).keys()].map(() => ({
-  person: {
-    id: "-",
-    name: "-",
-  },
-  worldRank: 1,
-  best: 0,
-}));
+export const useRequest = (eventId: string, isSingle: boolean) => {
+  const isLoadingRef = useRef(false);
+  const currPage = useRef(1);
+  const [entries, setEntries] = useState<Array<Fields>>([]);
 
-export const useRequest = (
-  eventId: string,
-  isSingle: boolean,
-  page: number
-) => {
-  const [loading, setLoading] = useState(true);
-  const [entries, setEntries] = useState<Array<Fields>>(DEFAULT_ENTRIES);
+  const type = isSingle ? "single" : "average";
 
-  useEffect(() => {
-    setLoading(true);
+  const addLoadedEntries = (entries: Array<Fields>) => {
+    setEntries((es) => [
+      ...es,
+      ...entries.map((e: Fields) => ({ ...e, loading: false })),
+    ]);
+  };
 
-    const type = isSingle ? "single" : "average";
+  const requestNextPage = useCallback(() => {
+    if (isLoadingRef.current) {
+      return;
+    }
 
-    api.get(`/rankings/${type}?eventId=${eventId}&p=${page}`).then((resp) => {
-      console.log(resp.data);
-      setLoading(false);
-      setEntries(resp.data.results);
-    });
-  }, [eventId, isSingle, page]);
+    isLoadingRef.current = true;
+
+    api
+      .get(`/rankings/${type}?eventId=${eventId}&p=${currPage.current}`)
+      .then((resp) => {
+        currPage.current++;
+        isLoadingRef.current = false;
+
+        addLoadedEntries(resp.data.results);
+      });
+  }, [eventId, type]);
 
   return {
-    loading: loading || !entries.length,
-    entries: !loading && entries.length ? entries : DEFAULT_ENTRIES,
+    entries,
+    requestNextPage,
   };
 };
