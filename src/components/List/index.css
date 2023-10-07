@@ -26,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5em;
-  transition: transform 100ms ease;
+  transition: transform 150ms ease;
   transition-delay: var(--transition-delay);
 }
 
@@ -36,6 +36,7 @@
 
 .entry.loading {
   transform: scale(96%, 85%);
+  transition-delay: calc(var(--transition-delay) + 150ms);
 }
 
 .loader {
@@ -86,7 +87,7 @@
   margin-right: 0.5em;
 }
 
-.blob {
+.loading .blob {
   animation: loadingPulse 1000ms ease infinite alternate;
   transform: scale(100%, 100%);
 }
@@ -98,7 +99,11 @@
   position: relative;
   transform: scale(110%, 110%);
   transition: transform 150ms ease;
-  transition-delay: 0;
+  transition-delay: var(--transition-delay);
+}
+
+.loading .blob {
+  transition-delay: calc(var(--transition-delay) + 150ms);
 }
 
 .loaderRank {
@@ -120,7 +125,7 @@
 
 .entry .entryContent,
 .loading .loader {
-  transition: opacity 250ms ease;
+  transition: opacity 300ms ease;
   transition-delay: var(--transition-delay);
 }
 

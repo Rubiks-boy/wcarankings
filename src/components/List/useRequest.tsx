@@ -23,7 +23,7 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
           ...e,
           loading: false,
           globalIndex: prevFirstIndex - entries.length + i,
-          animationIndex: prevFirstIndex - i,
+          animationIndex: prevFirstIndex - i - 1,
         })),
         ...oldEntriesKept,
       ];
