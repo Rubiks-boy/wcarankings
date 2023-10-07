@@ -19,15 +19,12 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
 
       const prevFirstIndex = oldEntriesKept[0]?.globalIndex ?? 0;
       return [
-        ...entries.map((e: ApiFields, i) => {
-          const globalIndex = prevFirstIndex - entries.length + i;
-          return {
-            ...e,
-            loading: false,
-            globalIndex,
-            animationIndex: globalIndex,
-          };
-        }),
+        ...entries.map((e: ApiFields, i) => ({
+          ...e,
+          loading: false,
+          globalIndex: prevFirstIndex - entries.length + i,
+          animationIndex: prevFirstIndex - i,
+        })),
         ...oldEntriesKept,
       ];
     });

@@ -1,5 +1,4 @@
 import { Entry } from "./Entry";
-import { PAGE_SIZE } from "../../constants";
 import { useInfiniteScrollingRequest } from "./useInfiniteScrollingRequest";
 
 import "./index.css";
@@ -20,10 +19,7 @@ export const List = ({
   const rows = entries.map((fields) => (
     <Entry
       key={fields.globalIndex}
-      animationIndex={
-        fields.animationIndex ??
-        (fields.globalIndex < PAGE_SIZE ? fields.globalIndex : 0)
-      }
+      animationIndex={fields.animationIndex}
       rank={fields.worldRank}
       fields={fields}
     />
