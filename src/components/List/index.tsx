@@ -5,7 +5,7 @@ import { useIntersectionObserver } from "./useIntersectionObserver";
 
 import "./index.css";
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 25;
 const LOADING_ENTRY = {
   person: {
     id: "-",
@@ -23,7 +23,10 @@ export const List = ({
   eventId: string;
   isSingle: boolean;
 }) => {
-  const { entries, requestNextPage } = useRequest(eventId, isSingle);
+  const { startingIndex, entries, requestNextPage } = useRequest(
+    eventId,
+    isSingle
+  );
   const loaderNodeRef = useRef<HTMLDivElement>(null);
   const isIntersecting = useIntersectionObserver(loaderNodeRef);
 
@@ -39,7 +42,7 @@ export const List = ({
   const rows = allEntries.map((fields, i) => {
     return (
       <Entry
-        key={i}
+        key={startingIndex + i}
         index={fields.loading ? i : 10}
         rank={fields.worldRank}
         fields={fields}
@@ -48,7 +51,10 @@ export const List = ({
   });
 
   return (
-    <div className="listWrapper">
+    <div
+      className="listWrapper"
+      style={{ "--starting-index": startingIndex } as React.CSSProperties}
+    >
       <ol className="list">{rows}</ol>
       <div className="triggerLoad" ref={loaderNodeRef}></div>
     </div>

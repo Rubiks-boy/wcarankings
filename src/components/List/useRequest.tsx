@@ -2,18 +2,26 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Fields } from "./Entry";
 import { api } from "../../api";
 
+const MAX_ENTRIES = 75;
+
 export const useRequest = (eventId: string, isSingle: boolean) => {
   const currentRequestRef = useRef<string | null>(null);
   const currPage = useRef(1);
+  const [startingIndex, setStartingIndex] = useState(0);
   const [entries, setEntries] = useState<Array<Fields>>([]);
 
   const type = isSingle ? "single" : "average";
 
   const addLoadedEntries = (entries: Array<Fields>) => {
-    setEntries((es) => [
-      ...es,
-      ...entries.map((e: Fields) => ({ ...e, loading: false })),
-    ]);
+    setEntries((es) => {
+      const oldEntriesKept = es.slice(-MAX_ENTRIES);
+      const numDeleted = es.length - oldEntriesKept.length;
+      setStartingIndex((startIndex) => startIndex + numDeleted);
+      return [
+        ...oldEntriesKept,
+        ...entries.map((e: Fields) => ({ ...e, loading: false })),
+      ];
+    });
   };
 
   const reset = () => {
@@ -45,6 +53,7 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
   }, [eventId, type]);
 
   return {
+    startingIndex,
     entries,
     requestNextPage,
   };
