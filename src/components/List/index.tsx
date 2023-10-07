@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Entry } from "./Entry";
 import { useRequest } from "./useRequest";
+import { useIntersectionObserver } from "./useIntersectionObserver";
 
 import "./index.css";
-import { useIntersectionObserver } from "./useIntersectionObserver";
 
 const PAGE_SIZE = 50;
 const LOADING_ENTRY = {
