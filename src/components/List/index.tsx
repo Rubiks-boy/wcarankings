@@ -5,7 +5,7 @@ import { useIntersectionObserver } from "./useIntersectionObserver";
 
 import "./index.css";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 100;
 const LOADING_ENTRY = {
   person: {
     id: "-",

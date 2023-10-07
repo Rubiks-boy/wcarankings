@@ -104,7 +104,7 @@
 }
 
 .triggerLoad {
-  height: calc(50 * (3.5em + 2px));
+  height: calc(100 * (3.5em + 2px));
   position: absolute;
   inset-inline: 50%;
   bottom: 0;
