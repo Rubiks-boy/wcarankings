@@ -22,7 +22,7 @@ export const Entry = ({
       })}
       style={
         {
-          "--transition-delay": `${transitionDelay * 8}ms`,
+          "--transition-delay": `${transitionDelay * 10}ms`,
         } as React.CSSProperties
       }
     >
