@@ -1,25 +1,48 @@
 .chooser {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
   gap: 1em;
 }
 
-.chooser select {
+.selectInput select {
   font-family: "Fira Sans", sans-serif;
+  -webkit-appearance: none;
   background-color: #fff;
   cursor: pointer;
   transition: background-color 150ms ease, border 150ms ease;
   border-radius: 0.5em;
-  padding: 0.5em;
+  padding: 1em;
+  padding-right: 2.5em;
   border: 1px solid #ccc;
-  max-width: 300px;
+  font-size: 0.85em;
+  width: 100%;
+  color: #000;
 }
 
-.chooser select:hover {
+.selectInput {
+  position: relative;
+}
+
+.selectInput svg {
+  position: absolute;
+  right: 0.5em;
+  bottom: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.selectInput:hover select {
   background-color: #f0f0f0;
 }
 
-.chooser select:focus-visible {
+.selectInput:hover svg {
+  transform: translateY(-50%) scale(110%);
+}
+
+.selectInput select:focus-visible {
   border: 1px solid rgba(121, 92, 169, 0.7);
   box-shadow: 0 0 5px rgba(121, 92, 169, 0.3);
   outline: none;

@@ -1,10 +1,13 @@
 .listWrapper {
+  --page-size: 25;
+  --starting-index: 0;
+  --entry-height: calc(3.7em + 2px);
+
   display: flex;
   justify-content: center;
   position: relative;
-  --starting-index: 0;
-  padding-top: calc(var(--starting-index) * (3.5em + 2px));
-  margin-top: calc(-25 * (3.5em + 2px));
+  padding-top: calc(var(--starting-index) * var(--entry-height));
+  margin-top: calc(-1 * var(--page-size) * var(--entry-height));
 }
 
 .list {
@@ -126,10 +129,12 @@
   inset-inline: 50%;
 }
 .triggerLoad.previous {
-  height: calc((var(--starting-index) + 25) * (3.5em + 2px));
+  height: calc(
+    (var(--starting-index) + var(--page-size)) * var(--entry-height)
+  );
   top: 0;
 }
 .triggerLoad.next {
-  height: calc(25 * (3.5em + 2px));
+  height: calc(var(--page-size) * var(--entry-height));
   bottom: 0;
 }
