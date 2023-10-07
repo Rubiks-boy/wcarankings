@@ -1,34 +1,30 @@
 import classNames from "classnames";
 import React from "react";
-
-export type Fields = {
-  person: {
-    id: string;
-    name: string;
-  };
-  best: number;
-  worldRank: number;
-  loading?: boolean;
-  globalIndex: number;
-  animationIndex?: number;
-};
+import type { EntryFields } from "../../types";
+import { PAGE_SIZE } from "../../constants";
 
 export const Entry = ({
   fields,
   rank,
-  index,
+  animationIndex,
 }: {
-  fields?: Fields;
+  fields?: EntryFields;
   rank: number;
-  index: number;
+  animationIndex: number;
 }) => {
+  const transitionDelay = animationIndex < PAGE_SIZE ? animationIndex : 0;
+
   return (
     <li
       className={classNames("entry", {
         loading: !!fields?.loading,
         hide: (fields?.globalIndex ?? 0) < 0,
       })}
-      style={{ "--transition-delay": `${index * 8}ms` } as React.CSSProperties}
+      style={
+        {
+          "--transition-delay": `${transitionDelay * 8}ms`,
+        } as React.CSSProperties
+      }
     >
       <div className="loader">
         <div className="loaderContent">

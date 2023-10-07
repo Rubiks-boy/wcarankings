@@ -1,34 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Fields } from "./Entry";
 import { api } from "../../api";
 import { MAX_PAGES, PAGE_SIZE } from "../../constants";
+import type { ApiFields, FieldsWithIndex, EntryFields } from "../../types";
 
 export const useRequest = (eventId: string, isSingle: boolean) => {
   const currentRequestRef = useRef<string | null>(null);
   const firstPage = useRef(1);
   const lastPage = useRef(1);
-  const [entries, setEntries] = useState<Array<Fields>>([]);
+  const [entries, setEntries] = useState<Array<EntryFields>>([]);
 
   const type = isSingle ? "single" : "average";
 
-  const prependEntries = (entries: Array<Fields>) => {
+  const prependEntries = (entries: Array<FieldsWithIndex>) => {
     setEntries((es) => {
       const oldEntriesKept = es.slice(0, MAX_PAGES * PAGE_SIZE);
       const pagesDeleted = (es.length - oldEntriesKept.length) / PAGE_SIZE;
       lastPage.current -= pagesDeleted;
+
       const prevFirstIndex = oldEntriesKept[0]?.globalIndex ?? 0;
       return [
-        ...entries.map((e: Fields, i) => ({
-          ...e,
-          loading: false,
-          globalIndex: prevFirstIndex - entries.length + i,
-        })),
+        ...entries.map((e: ApiFields, i) => {
+          const globalIndex = prevFirstIndex - entries.length + i;
+          return {
+            ...e,
+            loading: false,
+            globalIndex,
+            animationIndex: globalIndex,
+          };
+        }),
         ...oldEntriesKept,
       ];
     });
   };
 
-  const appendEntries = (entries: Array<Fields>) => {
+  const appendEntries = (entries: Array<FieldsWithIndex>) => {
     setEntries((es) => {
       const oldEntriesKept = es.slice(-MAX_PAGES * PAGE_SIZE);
       const pagesDeleted = (es.length - oldEntriesKept.length) / PAGE_SIZE;
@@ -37,17 +42,18 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
         oldEntriesKept[oldEntriesKept.length - 1]?.globalIndex ?? -1;
       return [
         ...oldEntriesKept,
-        ...entries.map((e: Fields, i) => ({
+        ...entries.map((e, i) => ({
           ...e,
           loading: false,
           globalIndex: prevLastIndex + i + 1,
+          animationIndex: prevLastIndex + i + 1,
         })),
       ];
     });
   };
 
   const requestPage = useCallback(
-    (page: number, cb: (entries: Array<Fields>) => void) => {
+    (page: number, cb: (entries: Array<FieldsWithIndex>) => void) => {
       if (currentRequestRef.current) {
         return;
       }
@@ -61,7 +67,7 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
           return;
         }
 
-        const entries = resp.data.results.map((e: Fields, i: number) => ({
+        const entries = resp.data.results.map((e: ApiFields, i: number) => ({
           ...e,
           globalIndex: (page - 1) * PAGE_SIZE + i,
         }));

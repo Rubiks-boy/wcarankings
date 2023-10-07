@@ -10,7 +10,6 @@
 .list {
   max-width: 1000px;
   width: 100%;
-  line-height: 1;
   --transition-delay: 0;
 }
 
@@ -72,7 +71,7 @@
   margin-right: 0.5em;
 }
 
-.loading .blob {
+.blob {
   animation: loadingPulse 1000ms ease infinite alternate;
   transform: scale(100%, 100%);
 }
