@@ -1,46 +1,26 @@
 .chooser {
   display: flex;
-  gap: 0.5em 3em;
-  padding-bottom: 1em;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-.chooser > div {
-  display: flex;
+  align-items: center;
   gap: 1em;
 }
 
-.chooser button,
 .chooser select {
   font-family: "Fira Sans", sans-serif;
   background-color: #fff;
-  font-weight: 400;
   cursor: pointer;
   transition: background-color 150ms ease, border 150ms ease;
   border-radius: 0.5em;
   padding: 0.5em;
   border: 1px solid #ccc;
+  max-width: 300px;
 }
 
-.chooser button {
-  width: 7em;
-}
-
-.chooser select:hover,
-.chooser button:hover {
+.chooser select:hover {
   background-color: #f0f0f0;
 }
 
-.chooser button:disabled {
-  border: 1px solid #eee;
-  pointer-events: none;
-}
-
-.chooser select:focus-visible,
-.chooser button:focus-visible {
+.chooser select:focus-visible {
   border: 1px solid rgba(121, 92, 169, 0.7);
   box-shadow: 0 0 5px rgba(121, 92, 169, 0.3);
   outline: none;
-  /* background-color: red !important; */
-  pointer-events: none;
 }

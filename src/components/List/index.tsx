@@ -22,7 +22,6 @@ export const List = ({
 }: {
   eventId: string;
   isSingle: boolean;
-  page: number;
 }) => {
   const { entries, requestNextPage } = useRequest(eventId, isSingle);
   const loaderNodeRef = useRef<HTMLDivElement>(null);

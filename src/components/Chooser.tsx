@@ -21,9 +21,6 @@ type Props = {
   setEventId: (eventId: string) => void;
   isSingle: boolean;
   toggleSingle: () => void;
-  page: number;
-  prevPage: () => void;
-  nextPage: () => void;
 };
 
 export const Chooser = ({
@@ -31,41 +28,30 @@ export const Chooser = ({
   setEventId,
   isSingle,
   toggleSingle,
-  page,
-  nextPage,
-  prevPage,
 }: Props) => {
   return (
     <div className="chooser">
-      <div>
-        <select
-          name="Event Id"
-          onChange={(e) => setEventId(e.target.value)}
-          value={eventId}
-        >
-          {Object.entries(EVENTS_MAP).map(([eventId, eventName]) => {
-            return (
-              <option key={eventId} value={eventId}>
-                {eventName}
-              </option>
-            );
-          })}
-        </select>
-        <select
-          name="Ranking type"
-          onChange={toggleSingle}
-          value={isSingle ? "single" : "average"}
-        >
-          <option value="single">Single</option>
-          <option value="average">Average</option>
-        </select>
-      </div>
-      <div>
-        <button onClick={prevPage} disabled={page === 1}>
-          Previous
-        </button>
-        <button onClick={nextPage}>Next</button>
-      </div>
+      <select
+        name="Event Id"
+        onChange={(e) => setEventId(e.target.value)}
+        value={eventId}
+      >
+        {Object.entries(EVENTS_MAP).map(([eventId, eventName]) => {
+          return (
+            <option key={eventId} value={eventId}>
+              {eventName}
+            </option>
+          );
+        })}
+      </select>
+      <select
+        name="Ranking type"
+        onChange={toggleSingle}
+        value={isSingle ? "single" : "average"}
+      >
+        <option value="single">Single</option>
+        <option value="average">Average</option>
+      </select>
     </div>
   );
 };
