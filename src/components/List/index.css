@@ -4,6 +4,7 @@
   position: relative;
   --starting-index: 0;
   padding-top: calc(var(--starting-index) * (3.5em + 2px));
+  margin-top: calc(-25 * (3.5em + 2px));
 }
 
 .list {
@@ -25,6 +26,10 @@
   margin-bottom: 0.5em;
   transition: transform 100ms ease;
   transition-delay: var(--transition-delay);
+}
+
+.entry.hide {
+  visibility: hidden;
 }
 
 .entry.loading {
@@ -109,5 +114,10 @@
   height: calc(25 * (3.5em + 2px));
   position: absolute;
   inset-inline: 50%;
+}
+.triggerLoad.previous {
+  top: calc(var(--starting-index) * (3.5em + 2px));
+}
+.triggerLoad.next {
   bottom: 0;
 }

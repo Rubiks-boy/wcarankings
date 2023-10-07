@@ -2,19 +2,10 @@ import { useEffect, useRef } from "react";
 import { Entry } from "./Entry";
 import { useRequest } from "./useRequest";
 import { useIntersectionObserver } from "./useIntersectionObserver";
+import { LOADING_ENTRY, PAGE_SIZE } from "../../constants";
 
 import "./index.css";
-
-const PAGE_SIZE = 25;
-const LOADING_ENTRY = {
-  person: {
-    id: "-",
-    name: "-",
-  },
-  worldRank: 1,
-  best: 0,
-  loading: true,
-};
+import classNames from "classnames";
 
 export const List = ({
   eventId,
@@ -23,27 +14,49 @@ export const List = ({
   eventId: string;
   isSingle: boolean;
 }) => {
-  const { startingIndex, entries, requestNextPage } = useRequest(
-    eventId,
-    isSingle
-  );
-  const loaderNodeRef = useRef<HTMLDivElement>(null);
-  const isIntersecting = useIntersectionObserver(loaderNodeRef);
+  const { startingIndex, entries, requestNextPage, requestPreviousPage } =
+    useRequest(eventId, isSingle);
+  const prevLoaderNodeRef = useRef<HTMLDivElement>(null);
+  const nextLoaderNodeRef = useRef<HTMLDivElement>(null);
+  const isPrevIntersecting = useIntersectionObserver(prevLoaderNodeRef);
+  const isNextIntersecting = useIntersectionObserver(nextLoaderNodeRef);
 
   useEffect(() => {
-    isIntersecting && requestNextPage();
+    isPrevIntersecting && requestPreviousPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntersecting, entries]);
+  }, [isPrevIntersecting, entries]);
+
+  useEffect(() => {
+    isNextIntersecting && requestNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNextIntersecting, entries]);
+
+  const firstGlobalIndex = entries[0]?.globalIndex ?? 0;
+
+  const beforeLoaderEntries = [...Array(PAGE_SIZE).keys()].map((i) => ({
+    ...LOADING_ENTRY,
+    globalIndex: firstGlobalIndex - PAGE_SIZE + i,
+    animationIndex: PAGE_SIZE - i,
+  }));
+  const afterLoaderEntries = [...Array(PAGE_SIZE).keys()].map((i) => ({
+    ...LOADING_ENTRY,
+    globalIndex: firstGlobalIndex + entries.length + i,
+    animationIndex: i,
+  }));
 
   const allEntries = [
+    ...beforeLoaderEntries,
     ...entries,
-    ...[...Array(PAGE_SIZE).keys()].map(() => LOADING_ENTRY),
+    ...afterLoaderEntries,
   ];
   const rows = allEntries.map((fields, i) => {
     return (
       <Entry
-        key={startingIndex + i}
-        index={fields.loading ? i : 10}
+        key={fields.globalIndex}
+        index={
+          fields.animationIndex ??
+          (fields.globalIndex < PAGE_SIZE ? fields.globalIndex : 0)
+        }
         rank={fields.worldRank}
         fields={fields}
       />
@@ -55,8 +68,9 @@ export const List = ({
       className="listWrapper"
       style={{ "--starting-index": startingIndex } as React.CSSProperties}
     >
+      <div className="triggerLoad previous" ref={prevLoaderNodeRef}></div>
       <ol className="list">{rows}</ol>
-      <div className="triggerLoad" ref={loaderNodeRef}></div>
+      <div className="triggerLoad next" ref={nextLoaderNodeRef}></div>
     </div>
   );
 };

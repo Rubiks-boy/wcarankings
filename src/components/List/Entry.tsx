@@ -9,6 +9,8 @@ export type Fields = {
   best: number;
   worldRank: number;
   loading?: boolean;
+  globalIndex: number;
+  animationIndex?: number;
 };
 
 export const Entry = ({
@@ -22,7 +24,10 @@ export const Entry = ({
 }) => {
   return (
     <li
-      className={classNames("entry", { loading: !!fields?.loading })}
+      className={classNames("entry", {
+        loading: !!fields?.loading,
+        hide: (fields?.globalIndex ?? 0) < 0,
+      })}
       style={{ "--transition-delay": `${index * 8}ms` } as React.CSSProperties}
     >
       <div className="loader">
