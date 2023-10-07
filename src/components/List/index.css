@@ -110,13 +110,14 @@
 }
 
 .triggerLoad {
-  height: calc(25 * (3.5em + 2px));
   position: absolute;
   inset-inline: 50%;
 }
 .triggerLoad.previous {
-  top: calc(var(--starting-index) * (3.5em + 2px));
+  height: calc((var(--starting-index) + 25) * (3.5em + 2px));
+  top: 0;
 }
 .triggerLoad.next {
+  height: calc(25 * (3.5em + 2px));
   bottom: 0;
 }
