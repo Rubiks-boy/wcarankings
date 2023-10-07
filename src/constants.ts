@@ -3,10 +3,10 @@ export const MAX_PAGES = 3;
 
 export const LOADING_ENTRY = {
   person: {
-    id: "-",
-    name: "-",
+    id: "",
+    name: "",
   },
-  worldRank: 1,
+  worldRank: 0,
   best: 0,
   loading: true,
 };

@@ -2,6 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import type { EntryFields } from "../../types";
 import { PAGE_SIZE } from "../../constants";
+import { useRetainValue } from "./useRetainValue";
 
 export const Entry = ({
   fields,
@@ -13,6 +14,10 @@ export const Entry = ({
   animationIndex: number;
 }) => {
   const transitionDelay = animationIndex % PAGE_SIZE;
+
+  const name = useRetainValue(fields?.person.name);
+  const id = useRetainValue(fields?.person.id);
+  const rankIndex = useRetainValue(rank);
 
   return (
     <li
@@ -34,9 +39,9 @@ export const Entry = ({
         <div className="loaderBest blob"></div>
       </div>
       <div className="entryContent">
-        <span className="rank">{rank}</span>
-        <span>{fields?.person.name}</span>
-        <span className="wcaId">({fields?.person.id})</span>
+        <span className="rank">{rankIndex}</span>
+        <span>{name}</span>
+        <span className="wcaId">({id})</span>
       </div>
       <div className="entryContent">
         {((fields?.best ?? 0) / 100).toFixed(2)}

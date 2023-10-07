@@ -91,14 +91,14 @@
   transform: scale(100%, 100%);
 }
 
-.blob {
+.loader .blob {
   height: 1em;
   background-color: #ccc;
   border-radius: 0.5em;
   position: relative;
   transform: scale(110%, 110%);
   transition: transform 150ms ease;
-  transition-delay: var(--transition-delay);
+  transition-delay: 0;
 }
 
 .loaderRank {
@@ -118,9 +118,9 @@
   opacity: 0;
 }
 
-.entry:not(.loading) .entryContent,
+.entry .entryContent,
 .loading .loader {
-  transition: opacity 150ms ease;
+  transition: opacity 250ms ease;
   transition-delay: var(--transition-delay);
 }
 
