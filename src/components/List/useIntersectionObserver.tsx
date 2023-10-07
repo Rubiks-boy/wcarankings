@@ -2,7 +2,7 @@ import { useEffect, useState, RefObject } from "react";
 
 const options = {
   root: null,
-  rootMargin: "500px",
+  rootMargin: "300px",
   threshold: 0,
 };
 

@@ -12,7 +12,7 @@ export const Entry = ({
   rank: number;
   animationIndex: number;
 }) => {
-  const transitionDelay = animationIndex < PAGE_SIZE ? animationIndex : 0;
+  const transitionDelay = animationIndex % PAGE_SIZE;
 
   return (
     <li
