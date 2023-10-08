@@ -1,0 +1,7 @@
+.listWrapper {
+  height: 8000px;
+}
+
+.list {
+  transform: translateY(var(--translateY));
+}

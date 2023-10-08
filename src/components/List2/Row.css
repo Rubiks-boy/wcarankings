@@ -1,0 +1,46 @@
+.listItem {
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  width: 100%;
+}
+
+.row,
+.loader {
+  padding: 1em;
+  display: flex;
+  gap: 0.5em;
+}
+
+.row {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.rank {
+  width: 5ch;
+  margin-right: 1em;
+}
+.best {
+  margin-left: auto;
+  width: 6ch;
+  text-align: right;
+}
+
+.loaderBlob {
+  height: 1em;
+  margin-block: 0.1em; /* Line height is 1.2em */
+  padding: 0.5em;
+  background-color: #ccc;
+  border-radius: 0.5em;
+}
+.loaderBlob.name {
+  width: 80%;
+  max-width: 500px;
+  margin-right: 1em;
+}

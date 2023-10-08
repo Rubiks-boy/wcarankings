@@ -1,5 +1,7 @@
 export const PAGE_SIZE = 25;
 export const MAX_PAGES = 3;
+export const ENTRY_HEIGHT = 3.7 * 16 + 2;
+export const LOADING_BUFFER = 0;
 
 export const LOADING_ENTRY = {
   person: {

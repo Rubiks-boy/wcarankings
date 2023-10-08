@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { List } from "./components/List";
+import { List } from "./components/List2";
 import { Chooser } from "./components/Chooser";
 import "./App.css";
 
