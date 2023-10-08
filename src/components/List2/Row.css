@@ -1,7 +1,8 @@
 .listItem {
   --t-duration: 150ms;
-  --t-opacity: opacity var(--t-duration) ease;
-  --t-transform: transform var(--t-duration) ease;
+  --t-animation-delay: 0;
+  --t-opacity: opacity var(--t-duration) ease var(--t-animation-delay);
+  --t-transform: transform var(--t-duration) ease var(--t-animation-delay);
   --t-base: var(--t-opacity), var(--t-transform);
 
   position: relative;

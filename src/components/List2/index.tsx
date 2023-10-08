@@ -32,7 +32,7 @@ export const List = ({
         style={{ "--translateY": `${translateY}px` } as CSSProperties}
       >
         {entries.map((maybeFields, i) => (
-          <Row key={i + startIndex} fields={maybeFields} />
+          <Row key={i + startIndex} animationIndex={i} fields={maybeFields} />
         ))}
       </ol>
     </div>
