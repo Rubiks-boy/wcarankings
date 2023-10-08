@@ -25,8 +25,6 @@ export const List = ({
 
   const entries = getEntries(startIndex, NUM_ENTRIES_RENDERED);
 
-  console.log(entries);
-
   return (
     <div className="listWrapper">
       <ol
