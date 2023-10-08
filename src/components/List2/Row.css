@@ -1,22 +1,37 @@
 .listItem {
+  --t-duration: 150ms;
+  --t-opacity: opacity var(--t-duration) ease;
+  --t-transform: transform var(--t-duration) ease;
+  --t-base: var(--t-opacity), var(--t-transform);
+
   position: relative;
+  transition: var(--t-transform);
 }
 
 .loader {
   position: absolute;
   width: 100%;
+  opacity: 0;
+}
+
+.listItem.isLoading {
+  transform: scale(96%, 85%);
+}
+.isLoading .loader {
+  opacity: 1;
+}
+.isLoading .row {
+  opacity: 0;
 }
 
 .row,
 .loader {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
   padding: 1em;
   display: flex;
   gap: 0.5em;
-}
-
-.row {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 300;
+  transition: var(--t-opacity);
   border: 1px solid #ccc;
   border-radius: 0.5em;
   margin-bottom: 0.5em;
@@ -40,6 +55,11 @@
   padding: 0.5em;
   background-color: #ccc;
   border-radius: 0.5em;
+  transform: scale(110%, 110%);
+  transition: var(--t-transform);
+}
+.isLoading .loaderBlob {
+  transform: unset;
 }
 .loaderBlob.name {
   width: 80%;

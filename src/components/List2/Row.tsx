@@ -1,30 +1,21 @@
+import classNames from "classnames";
 import type { ApiFields } from "../../types";
 
 import "./Row.css";
-
-const Loader = ({ isLoading }: { isLoading: boolean }) => {
-  if (!isLoading) {
-    return null;
-  }
-  return (
-    <div className="loader">
-      <div className="rank loaderBlob"></div>
-      <div className="name loaderBlob"></div>
-      <div className="best loaderBlob"></div>
-    </div>
-  );
-};
+import { useRetainValue } from "./useRetainValue";
 
 export const Row = ({ fields }: { fields: ApiFields | null }) => {
-  const rank = fields?.worldRank ?? 0;
-  const name = fields?.person.name ?? "";
-  const id = fields?.person.id ?? "";
-
-  console.log(fields);
+  const rank = useRetainValue(fields?.worldRank) ?? 0;
+  const name = useRetainValue(fields?.person.name) ?? "";
+  const id = useRetainValue(fields?.person.id) ?? "";
 
   return (
-    <li className="listItem">
-      <Loader isLoading={!fields} />
+    <li className={classNames("listItem", { isLoading: !fields })}>
+      <div className="loader">
+        <div className="rank loaderBlob"></div>
+        <div className="name loaderBlob"></div>
+        <div className="best loaderBlob"></div>
+      </div>
       <div className="row">
         <span className="rank">{rank}</span>
         <span>{name}</span>
