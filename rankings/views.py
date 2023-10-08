@@ -19,7 +19,7 @@ class SingleRankingsList(generics.ListAPIView):
         if eventId is None:
             eventId = "333"
 
-        return SingleRank.objects.filter(eventId=eventId)
+        return SingleRank.objects.filter(eventId=eventId).order_by("worldRank")
 
 
 class AverageRankingsList(generics.ListAPIView):
@@ -31,7 +31,7 @@ class AverageRankingsList(generics.ListAPIView):
         if eventId is None:
             eventId = "333"
 
-        return AverageRank.objects.filter(eventId=eventId)
+        return AverageRank.objects.filter(eventId=eventId).order_by("worldRank")
 
 
 @api_view(["GET"])
