@@ -1,5 +1,5 @@
 .listWrapper {
-  --page-size: 25;
+  --page-size: 100;
   --starting-index: 0;
   --entry-height: calc(3.7em + 2px);
 
