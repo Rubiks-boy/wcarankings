@@ -28,7 +28,7 @@ export const Row = ({ fields }: { fields: ApiFields | null }) => {
       <div className="row">
         <span className="rank">{rank}</span>
         <span>{name}</span>
-        <span>({id})</span>
+        <span className="wcaId">({id})</span>
         <span className="best">{((fields?.best ?? 0) / 100).toFixed(2)}</span>
       </div>
     </li>

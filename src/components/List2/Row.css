@@ -24,12 +24,14 @@
 
 .rank {
   width: 5ch;
-  margin-right: 1em;
 }
 .best {
   margin-left: auto;
   width: 6ch;
   text-align: right;
+}
+.wcaId {
+  display: none;
 }
 
 .loaderBlob {
@@ -43,4 +45,13 @@
   width: 80%;
   max-width: 500px;
   margin-right: 1em;
+}
+
+@media only screen and (min-width: 500px) {
+  .wcaId {
+    display: block;
+  }
+  .rank {
+    margin-right: 1em;
+  }
 }

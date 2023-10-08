@@ -1,7 +1,10 @@
 .listWrapper {
-  height: 8000px;
+  display: flex;
+  justify-content: center;
 }
 
 .list {
   transform: translateY(var(--translateY));
+  width: 100%;
+  max-width: 1000px;
 }
