@@ -1,6 +1,13 @@
 .app {
   padding: 1em;
   background-color: #fffcff;
+  --font-family: "Fira Sans", sans-serif;
+}
+
+.app,
+button,
+select {
+  font-family: var(--font-family);
 }
 
 .header {
@@ -18,7 +25,6 @@
 }
 
 .header h1 {
-  font-family: "Fira Sans", sans-serif;
   font-weight: 200;
   font-size: 2em;
 }

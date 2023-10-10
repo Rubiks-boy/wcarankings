@@ -30,6 +30,10 @@
   align-items: center;
   gap: 0.5em;
   position: relative;
+  font-size: 0.9em;
+  color: #222;
+  fill: #222;
+  transition: color 150ms ease, fill 150ms ease;
 }
 
 .JumpToTop-button:hover {
