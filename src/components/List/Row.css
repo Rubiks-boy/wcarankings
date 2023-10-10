@@ -40,6 +40,10 @@
 .rank {
   width: 5ch;
 }
+.name {
+  white-space: nowrap;
+  overflow: auto;
+}
 .best {
   margin-left: auto;
   width: 6ch;

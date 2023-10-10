@@ -32,7 +32,7 @@ export const Row = ({
       </div>
       <div className="row">
         <span className="rank">{rank}</span>
-        <span>{name}</span>
+        <span className="name">{name}</span>
         <span className="wcaId">({id})</span>
         <span className="best">{((fields?.best ?? 0) / 100).toFixed(2)}</span>
       </div>
