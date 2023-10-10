@@ -4,17 +4,30 @@ import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 
+const calculateIndexOffset = () =>
+  Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
+
 const calculateFirstIndex = (scrollY: number = window.scrollY) =>
   Math.floor((scrollY - BUFFER) / ENTRY_HEIGHT);
+const getScrollIndex = (index: number) =>
+  (index % ENTRIES_PER_SCROLL_PAGE) +
+  (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
 
 export const useIndicesInView = () => {
   const scrollPageRef = useRef(0);
   const scrollIndexRef = useRef(calculateFirstIndex());
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
 
-  const scrollToTop = () => {
-    scrollPageRef.current = 0;
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  const scrollToIndex = (index: number) => {
+    const newRankIndex = index + calculateIndexOffset();
+
+    scrollPageRef.current =
+      Math.floor(newRankIndex / ENTRIES_PER_SCROLL_PAGE) -
+      (newRankIndex > ENTRIES_PER_SCROLL_PAGE ? 1 : -1);
+    window.scrollTo({
+      top: getScrollIndex(newRankIndex) * ENTRY_HEIGHT,
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -45,13 +58,9 @@ export const useIndicesInView = () => {
     return () => window.removeEventListener("scroll", cb);
   }, []);
 
-  const scrollIndex =
-    (rankIndex % ENTRIES_PER_SCROLL_PAGE) +
-    (rankIndex >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
-
   return {
     rankIndex,
-    scrollIndex,
-    scrollToTop,
+    scrollIndex: getScrollIndex(rankIndex),
+    scrollToIndex,
   };
 };
