@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 import "./Jump.css";
 
-export const VISIBLE_AFTER_NUM_ENTRIES = 75;
+export const VISIBLE_AFTER_NUM_ENTRIES = 40;
 
 const UpIcon = () => {
   return (
