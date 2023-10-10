@@ -19,11 +19,18 @@ export const useIndicesInView = () => {
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
 
   const scrollToIndex = (index: number) => {
-    const newRankIndex = index + calculateIndexOffset();
+    let newRankIndex = Math.max(index + calculateIndexOffset());
+    if (newRankIndex < 0) {
+      newRankIndex = 0;
+    }
 
-    scrollPageRef.current =
-      Math.floor(newRankIndex / ENTRIES_PER_SCROLL_PAGE) -
-      (newRankIndex > ENTRIES_PER_SCROLL_PAGE ? 1 : -1);
+    window.scrollTo({
+      top: SCROLL_BREAKPOINT,
+    });
+    scrollPageRef.current = Math.max(
+      Math.floor(newRankIndex / ENTRIES_PER_SCROLL_PAGE) - 1,
+      0
+    );
     window.scrollTo({
       top: getScrollIndex(newRankIndex) * ENTRY_HEIGHT,
       behavior: "smooth",
