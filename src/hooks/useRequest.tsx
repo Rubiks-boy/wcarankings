@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { api } from "../../api";
-import { PAGE_SIZE } from "../../constants";
-import type { ApiFields } from "../../types";
+import { api } from "../api";
+import { PAGE_SIZE } from "../constants";
+import type { ApiFields } from "../types";
 
 type FieldsWithIndex = ApiFields & { index: number };
 type Page = Array<FieldsWithIndex>;

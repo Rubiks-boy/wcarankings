@@ -1,4 +1,4 @@
-import { useFirstIndexInView } from "./List2/useFirstIndexInView";
+import { useFirstIndexInView } from "../hooks/useFirstIndexInView";
 
 import "./JumpToTop.css";
 import classNames from "classnames";

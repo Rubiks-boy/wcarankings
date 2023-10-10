@@ -1,7 +1,7 @@
-import { useRequest } from "./useRequest";
+import { useRequest } from "../../hooks/useRequest";
 import { Row } from "./Row";
 import { CSSProperties } from "react";
-import { useFirstIndexInView } from "./useFirstIndexInView";
+import { useFirstIndexInView } from "../../hooks/useFirstIndexInView";
 import { ENTRY_HEIGHT, NUM_ENTRIES_RENDERED } from "../../constants";
 
 import "./index.css";
