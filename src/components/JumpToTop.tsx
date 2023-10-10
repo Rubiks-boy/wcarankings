@@ -1,7 +1,6 @@
-import { useFirstIndexInView } from "../hooks/useFirstIndexInView";
+import classNames from "classnames";
 
 import "./JumpToTop.css";
-import classNames from "classnames";
 
 export const VISIBLE_AFTER_NUM_ENTRIES = 75;
 
@@ -18,15 +17,15 @@ const UpIcon = () => {
   );
 };
 
-export const JumpToTop = () => {
-  const firstIndex = useFirstIndexInView();
+export const JumpToTop = ({ rankIndex }: { rankIndex: number }) => {
   const handleClick = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
+
   return (
     <div
       className={classNames("JumpToTop", {
-        visible: firstIndex > VISIBLE_AFTER_NUM_ENTRIES,
+        visible: rankIndex > VISIBLE_AFTER_NUM_ENTRIES,
       })}
     >
       <button className="JumpToTop-button" onClick={handleClick}>

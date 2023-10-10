@@ -18,6 +18,7 @@ select {
   flex-wrap: wrap;
   padding-bottom: 1em;
   column-gap: 1em;
+  display: none;
 }
 
 .header > * {

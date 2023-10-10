@@ -2,12 +2,14 @@ import { useState } from "react";
 import { List } from "./components/List";
 import { Chooser } from "./components/Chooser";
 import { JumpToTop } from "./components/JumpToTop";
+import { useIndicesInView } from "./hooks/useIndicesInView";
 
 import "./App.css";
 
 function App() {
   const [eventId, setEventId] = useState("333");
   const [isSingle, setIsSingle] = useState(true);
+  const { rankIndex, scrollIndex } = useIndicesInView();
 
   const toggleSingle = () => setIsSingle(!isSingle);
 
@@ -23,8 +25,13 @@ function App() {
         />
       </header>
       <main>
-        <JumpToTop />
-        <List eventId={eventId} isSingle={isSingle} />
+        <JumpToTop rankIndex={rankIndex} />
+        <List
+          eventId={eventId}
+          isSingle={isSingle}
+          rankIndex={rankIndex}
+          scrollIndex={scrollIndex}
+        />
       </main>
     </div>
   );
