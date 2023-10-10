@@ -1,21 +1,27 @@
-.JumpToTop {
+.Jump {
   --animation-duration: 500ms;
   position: fixed;
   z-index: 1;
-  top: 1em;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   display: flex;
   justify-content: center;
   visibility: hidden;
   opacity: 0;
-  transform: translateY(-1em);
   transition: transform var(--animation-duration) ease,
     opacity var(--animation-duration) ease,
     visibility var(--animation-duration) ease var(--animation-duration);
 }
 
-.JumpToTop.visible {
+.Jump--up {
+  top: 1em;
+  transform: translateY(-1em);
+}
+.Jump--down {
+  bottom: 1em;
+  transform: translateY(1em);
+}
+
+.Jump.visible {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
@@ -23,7 +29,7 @@
     opacity var(--animation-duration) ease;
 }
 
-.JumpToTop-button {
+.Jump-button {
   border: none;
   background-color: transparent;
   display: flex;
@@ -36,18 +42,16 @@
   transition: color 150ms ease, fill 150ms ease;
 }
 
-.JumpToTop-button:hover {
+.Jump-button:hover {
   fill: rgb(136, 15, 211);
   color: rgb(136, 15, 211);
   cursor: pointer;
 }
 
-.JumpToTop-button::before {
+.Jump-button::before {
   content: "";
   position: absolute;
-  inset-inline: -1.5em;
-  top: -1em;
-  bottom: 0;
+  inset: -1.5em;
   background: rgba(255, 255, 255, 1);
   border-radius: 3em;
   filter: blur(1.5em);
