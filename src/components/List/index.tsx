@@ -33,27 +33,32 @@ export const List = ({
   const entries = getEntries(rankIndex, NUM_ENTRIES_RENDERED);
 
   return (
-    <div className="listWrapper" style={{ height: 3 * SCROLL_PAGE_HEIGHT }}>
-      <ol
-        className="list"
-        style={{ "--translateY": `${translateY}px` } as CSSProperties}
-      >
-        {entries.map((maybeFields, i) => (
-          <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
-        ))}
-      </ol>
-      {/* <ol
-        className="list"
-        style={
-          {
-            "--translateY": `${translateY + SCROLL_PAGE_HEIGHT}px`,
-          } as CSSProperties
-        }
-      >
-        {entries.map((maybeFields, i) => (
-          <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
-        ))}
-      </ol> */}
+    <div
+      className="outerListWrapper"
+      style={{ height: 3 * SCROLL_PAGE_HEIGHT }}
+    >
+      <div className="listContainer">
+        <ol
+          className="list"
+          style={{ "--translateY": `${translateY}px` } as CSSProperties}
+        >
+          {entries.map((maybeFields, i) => (
+            <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
+          ))}
+        </ol>
+        <ol
+          className="list"
+          style={
+            {
+              "--translateY": `${translateY - SCROLL_PAGE_HEIGHT}px`,
+            } as CSSProperties
+          }
+        >
+          {entries.map((maybeFields, i) => (
+            <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
+          ))}
+        </ol>
+      </div>
     </div>
   );
 };
