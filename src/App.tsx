@@ -9,7 +9,7 @@ import "./App.css";
 function App() {
   const [eventId, setEventId] = useState("333");
   const [isSingle, setIsSingle] = useState(true);
-  const { rankIndex, scrollIndex } = useIndicesInView();
+  const { rankIndex, scrollIndex, scrollToTop } = useIndicesInView();
 
   const toggleSingle = () => setIsSingle(!isSingle);
 
@@ -25,7 +25,7 @@ function App() {
         />
       </header>
       <main>
-        <JumpToTop rankIndex={rankIndex} />
+        <JumpToTop rankIndex={rankIndex} scrollToTop={scrollToTop} />
         <List
           eventId={eventId}
           isSingle={isSingle}

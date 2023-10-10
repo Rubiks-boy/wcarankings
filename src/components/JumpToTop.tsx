@@ -17,18 +17,20 @@ const UpIcon = () => {
   );
 };
 
-export const JumpToTop = ({ rankIndex }: { rankIndex: number }) => {
-  const handleClick = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  };
-
+export const JumpToTop = ({
+  rankIndex,
+  scrollToTop,
+}: {
+  rankIndex: number;
+  scrollToTop: () => void;
+}) => {
   return (
     <div
       className={classNames("JumpToTop", {
         visible: rankIndex > VISIBLE_AFTER_NUM_ENTRIES,
       })}
     >
-      <button className="JumpToTop-button" onClick={handleClick}>
+      <button className="JumpToTop-button" onClick={scrollToTop}>
         <UpIcon />
         <span>Jump to top</span>
         <UpIcon />

@@ -4,13 +4,18 @@ import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 
-const calculateFirstIndex = () =>
-  Math.floor((window.scrollY - BUFFER) / ENTRY_HEIGHT);
+const calculateFirstIndex = (scrollY: number = window.scrollY) =>
+  Math.floor((scrollY - BUFFER) / ENTRY_HEIGHT);
 
 export const useIndicesInView = () => {
   const scrollPageRef = useRef(0);
   const scrollIndexRef = useRef(calculateFirstIndex());
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
+
+  const scrollToTop = () => {
+    scrollPageRef.current = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const cb = () => {
@@ -47,5 +52,6 @@ export const useIndicesInView = () => {
   return {
     rankIndex,
     scrollIndex,
+    scrollToTop,
   };
 };
