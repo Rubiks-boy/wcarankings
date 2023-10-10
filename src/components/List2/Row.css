@@ -56,11 +56,15 @@
   padding: 0.5em;
   background-color: #ccc;
   border-radius: 0.5em;
-  transform: scale(110%, 110%);
+  transform: scale(120%, 120%);
   transition: var(--t-transform);
 }
 .isLoading .loaderBlob {
   transform: unset;
+}
+.loaderBlob.rank {
+  width: 3ch;
+  margin-right: 2em;
 }
 .loaderBlob.name {
   width: 80%;

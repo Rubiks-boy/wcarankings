@@ -22,7 +22,7 @@ export const Row = ({
 
   return (
     <li
-      className={classNames("listItem", { isLoading: !fields })}
+      className={classNames("listItem", { isLoading: !fields || false })}
       style={style}
     >
       <div className="loader">
