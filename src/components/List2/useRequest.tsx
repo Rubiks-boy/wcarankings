@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../../api";
-import { PAGE_SIZE, LOADING_BUFFER } from "../../constants";
+import { PAGE_SIZE } from "../../constants";
 import type { ApiFields } from "../../types";
 
 type FieldsWithIndex = ApiFields & { index: number };
@@ -59,7 +59,7 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
     howMany: number
   ): Array<FieldsWithIndex | null> => {
     const endIndex = startIndex + howMany;
-    loadRange(startIndex - LOADING_BUFFER, endIndex + LOADING_BUFFER);
+    loadRange(startIndex, endIndex);
 
     const entries: Array<FieldsWithIndex> = [];
     for (let i = Math.max(0, startIndex); i < endIndex; i++) {

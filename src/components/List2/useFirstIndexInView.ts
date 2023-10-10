@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ENTRY_HEIGHT } from "../../constants";
 
-const BUFFER = 300;
+const BUFFER = 600;
 
 const calculateFirstIndex = () =>
   Math.floor((window.scrollY - BUFFER) / ENTRY_HEIGHT);

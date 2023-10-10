@@ -2,11 +2,9 @@ import { useRequest } from "./useRequest";
 import { Row } from "./Row";
 import { CSSProperties } from "react";
 import { useFirstIndexInView } from "./useFirstIndexInView";
+import { ENTRY_HEIGHT, NUM_ENTRIES_RENDERED } from "../../constants";
 
 import "./index.css";
-import { ENTRY_HEIGHT } from "../../constants";
-
-const NUM_ENTRIES_RENDERED = 25;
 
 export const List = ({
   eventId,

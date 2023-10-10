@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { List } from "./components/List2";
 import { Chooser } from "./components/Chooser";
+import { JumpToTop } from "./components/JumpToTop";
+
 import "./App.css";
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         />
       </header>
       <main>
+        <JumpToTop />
         <List eventId={eventId} isSingle={isSingle} />
       </main>
     </div>
