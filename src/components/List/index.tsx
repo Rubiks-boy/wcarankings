@@ -17,11 +17,13 @@ export const List = ({
   isSingle,
   rankIndex,
   scrollIndex,
+  forceLoading,
 }: {
   eventId: string;
   isSingle: boolean;
   rankIndex: number;
   scrollIndex: number;
+  forceLoading: boolean;
 }) => {
   const { getEntries } = useRequest(eventId, isSingle);
 
@@ -43,7 +45,12 @@ export const List = ({
           style={{ "--translateY": `${translateY}px` } as CSSProperties}
         >
           {entries.map((maybeFields, i) => (
-            <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
+            <Row
+              key={i + rankIndex}
+              animationIndex={i}
+              fields={maybeFields}
+              forceLoading={forceLoading}
+            />
           ))}
         </ol>
         <ol
@@ -55,7 +62,12 @@ export const List = ({
           }
         >
           {entries.map((maybeFields, i) => (
-            <Row key={i + rankIndex} animationIndex={i} fields={maybeFields} />
+            <Row
+              key={i + rankIndex}
+              animationIndex={i}
+              fields={maybeFields}
+              forceLoading={forceLoading}
+            />
           ))}
         </ol>
       </div>

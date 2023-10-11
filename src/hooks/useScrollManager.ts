@@ -17,10 +17,11 @@ const getScrollIndex = (index: number) =>
   (index % ENTRIES_PER_SCROLL_PAGE) +
   (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
 
-export const useIndicesInView = () => {
+export const useScrollManager = () => {
   // State for what's currently on the screen
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
   const [scrollIndex, setScrollIndex] = useState(calculateFirstIndex());
+  const [forceLoading, setForceLoading] = useState(false);
 
   // Refs used by the scroll event handler
   // These values get pushed to state
@@ -35,9 +36,8 @@ export const useIndicesInView = () => {
   // Time of the last time we attempted to jump up/down 1000 entries
   const lastScrollEvent = useRef<number | null>(null);
 
-  const pageJumpCb = useRef<(() => void) | null>(null);
-
-  useOnScrollStop(pageJumpCb);
+  const scrollStopCb = useRef<(() => void) | null>(null);
+  useOnScrollStop(scrollStopCb);
 
   const scrollToIndex = (index: number) => {
     let newRankIndex = Math.max(index + calculateIndexOffset());
@@ -53,11 +53,18 @@ export const useIndicesInView = () => {
       0
     );
 
-    const endLocation = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
+    const toLoc = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
     const isScrollingDown = newRankIndex > rankIndex;
-    const scrollDelta =
-      Math.min(Math.abs(newRankIndex - rankIndex), 50) * ENTRY_HEIGHT;
-    performScroll(endLocation, scrollDelta, isScrollingDown);
+    const scrollDelta = Math.abs(newRankIndex - rankIndex) * ENTRY_HEIGHT;
+    setForceLoading(true);
+    performScroll({
+      toLoc,
+      scrollDelta,
+      isScrollingDown,
+    });
+    setTimeout(() => {
+      scrollStopCb.current = callFuncOnce(() => setForceLoading(false));
+    }, 150);
   };
 
   useEffect(() => {
@@ -94,9 +101,9 @@ export const useIndicesInView = () => {
       // 2) It prevents issues where we might receive multiple scroll
       //    events very quickly, which can mess with our state.
       if (scrollY >= 2 * SCROLL_BREAKPOINT) {
-        pageJumpCb.current = callFuncOnce(incScrollPage);
+        scrollStopCb.current = callFuncOnce(incScrollPage);
       } else if (scrollY < SCROLL_BREAKPOINT && scrollPageRef.current >= 1) {
-        pageJumpCb.current = callFuncOnce(decScrollPage);
+        scrollStopCb.current = callFuncOnce(decScrollPage);
       }
     };
 
@@ -128,5 +135,6 @@ export const useIndicesInView = () => {
     rankIndex,
     scrollIndex,
     scrollToIndex,
+    forceLoading,
   };
 };

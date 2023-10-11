@@ -66,8 +66,8 @@
   transform: unset;
 }
 .loaderBlob.rank {
-  width: 3ch;
-  margin-right: 2em;
+  width: 4ch;
+  margin-right: 1em;
 }
 .loaderBlob.name {
   width: 80%;

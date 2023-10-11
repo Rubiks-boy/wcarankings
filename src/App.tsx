@@ -2,14 +2,15 @@ import { useState } from "react";
 import { List } from "./components/List";
 import { Chooser } from "./components/Chooser";
 import { JumpUp, JumpDown } from "./components/Jump";
-import { useIndicesInView } from "./hooks/useIndicesInView";
+import { useScrollManager } from "./hooks/useScrollManager";
 
 import "./App.css";
 
 function App() {
   const [eventId, setEventId] = useState("333");
   const [isSingle, setIsSingle] = useState(true);
-  const { rankIndex, scrollIndex, scrollToIndex } = useIndicesInView();
+  const { rankIndex, scrollIndex, scrollToIndex, forceLoading } =
+    useScrollManager();
 
   const toggleSingle = () => setIsSingle(!isSingle);
 
@@ -34,6 +35,7 @@ function App() {
           isSingle={isSingle}
           rankIndex={rankIndex}
           scrollIndex={scrollIndex}
+          forceLoading={forceLoading}
         />
         <JumpDown
           rankIndex={rankIndex}
