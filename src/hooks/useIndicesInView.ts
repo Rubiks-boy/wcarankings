@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
+import { performScroll } from "../utils/scroll";
 
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 const EHHH_PRETTY_CLOSE = 100; // 100 pixels
-const MIN_MS_BETWEEN_SCROLLS = 10;
+const MIN_MS_BETWEEN_PAGE_SCROLLS = 10;
 
 const calculateIndexOffset = () =>
   Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
@@ -16,12 +17,22 @@ const getScrollIndex = (index: number) =>
   (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
 
 export const useIndicesInView = () => {
-  const scrollPageRef = useRef(0);
-  const scrollIndexRef = useRef(calculateFirstIndex());
-  const scrollingToIndex = useRef<number | null>(null);
   const lastScrollUp = useRef<number | null>(null);
   const lastScrollDown = useRef<number | null>(null);
+
+  // State for what's currently on the screen
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
+  const [scrollIndex, setScrollIndex] = useState(0);
+
+  // Refs used by the scroll event handler
+  // These values get pushed to state
+  const scrollPageRef = useRef(0);
+  const scrollIndexRef = useRef(calculateFirstIndex());
+
+  // Set when we're in the middle of scrolling to an index
+  // This makes sure the scrollToIndex window.scrollTo() events
+  // take precedence over the logic to jump around pages.
+  const scrollingToIndex = useRef<number | null>(null);
 
   const scrollToIndex = (index: number) => {
     let newRankIndex = Math.max(index + calculateIndexOffset());
@@ -37,22 +48,8 @@ export const useIndicesInView = () => {
       0
     );
 
-    const diffEntries = Math.abs(newRankIndex - rankIndex);
-    const isScrollingDown = newRankIndex > rankIndex;
-    const scrollDelta =
-      (isScrollingDown ? 1 : -1) * ENTRY_HEIGHT * Math.min(50, diffEntries);
     const endLocation = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
-    const startLocation = endLocation - scrollDelta;
-
-    window.scrollTo({
-      top: startLocation,
-      behavior: "instant",
-    });
-
-    window.scrollTo({
-      top: endLocation,
-      behavior: "smooth",
-    });
+    performScroll(endLocation);
   };
 
   useEffect(() => {
@@ -62,7 +59,7 @@ export const useIndicesInView = () => {
       const currTime = new Date().getTime();
       if (
         lastScrollDown.current === null ||
-        currTime - lastScrollDown.current < MIN_MS_BETWEEN_SCROLLS
+        currTime - lastScrollDown.current < MIN_MS_BETWEEN_PAGE_SCROLLS
       ) {
         scrollPageRef.current++;
         window.scroll({ top: scrollY - SCROLL_BREAKPOINT });
@@ -74,7 +71,7 @@ export const useIndicesInView = () => {
       if (
         scrollPageRef.current >= 1 &&
         (lastScrollUp.current === null ||
-          currTime - lastScrollUp.current < MIN_MS_BETWEEN_SCROLLS)
+          currTime - lastScrollUp.current < MIN_MS_BETWEEN_PAGE_SCROLLS)
       ) {
         window.scroll({ top: scrollY + SCROLL_BREAKPOINT });
         scrollPageRef.current--;
@@ -103,6 +100,7 @@ export const useIndicesInView = () => {
       if (firstIndex !== scrollIndexRef.current) {
         scrollIndexRef.current = firstIndex;
         requestAnimationFrame(() => {
+          setScrollIndex(firstIndex);
           setRankIndex(
             firstIndex + scrollPageRef.current * ENTRIES_PER_SCROLL_PAGE
           );
@@ -116,7 +114,7 @@ export const useIndicesInView = () => {
 
   return {
     rankIndex,
-    scrollIndex: getScrollIndex(rankIndex),
+    scrollIndex,
     scrollToIndex,
   };
 };
