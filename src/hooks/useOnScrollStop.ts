@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const MIN_MS_BETWEEN_SCROLL_EVENTS = 100;
+const MIN_MS_BETWEEN_SCROLL_EVENTS = 250;
 
 export const useOnScrollStop = (
   cb: React.MutableRefObject<(() => void) | null>

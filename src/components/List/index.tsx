@@ -53,23 +53,6 @@ export const List = ({
             />
           ))}
         </ol>
-        <ol
-          className="list"
-          style={
-            {
-              "--translateY": `${translateY - SCROLL_PAGE_HEIGHT}px`,
-            } as CSSProperties
-          }
-        >
-          {entries.map((maybeFields, i) => (
-            <Row
-              key={i + rankIndex}
-              animationIndex={i}
-              fields={maybeFields}
-              forceLoading={forceLoading}
-            />
-          ))}
-        </ol>
       </div>
     </div>
   );

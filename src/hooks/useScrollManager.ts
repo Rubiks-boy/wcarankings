@@ -4,7 +4,7 @@ import { performScroll } from "../utils/scroll";
 import { currTime, callFuncOnce } from "../utils";
 import { useOnScrollStop } from "./useOnScrollStop";
 
-const BUFFER = 500;
+const BUFFER = 1000;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 const EHHH_PRETTY_CLOSE = 100; // 100 pixels
 
@@ -112,12 +112,10 @@ export const useScrollManager = () => {
 
       if (firstIndex !== scrollIndexRef.current) {
         scrollIndexRef.current = firstIndex;
-        requestAnimationFrame(() => {
-          setScrollIndex(firstIndex);
-          setRankIndex(
-            firstIndex + scrollPageRef.current * ENTRIES_PER_SCROLL_PAGE
-          );
-        });
+        setScrollIndex(firstIndex);
+        setRankIndex(
+          firstIndex + scrollPageRef.current * ENTRIES_PER_SCROLL_PAGE
+        );
       }
     };
 
