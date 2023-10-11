@@ -3,7 +3,7 @@ import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
-const EHHH_PRETTY_CLOSE = 300;
+const EHHH_PRETTY_CLOSE = 100; // 100 pixels
 const MIN_MS_BETWEEN_SCROLLS = 10;
 
 const calculateIndexOffset = () =>
@@ -32,16 +32,25 @@ export const useIndicesInView = () => {
     // make sure we ignore any page jumps until we're within the scroll page.
     scrollingToIndex.current = newRankIndex;
 
-    window.scrollTo({
-      top: SCROLL_BREAKPOINT,
-      behavior: "instant",
-    });
     scrollPageRef.current = Math.max(
       Math.floor(newRankIndex / ENTRIES_PER_SCROLL_PAGE) - 1,
       0
     );
+
+    const diffEntries = Math.abs(newRankIndex - rankIndex);
+    const isScrollingDown = newRankIndex > rankIndex;
+    const scrollDelta =
+      (isScrollingDown ? 1 : -1) * ENTRY_HEIGHT * Math.min(50, diffEntries);
+    const endLocation = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
+    const startLocation = endLocation - scrollDelta;
+
     window.scrollTo({
-      top: getScrollIndex(newRankIndex) * ENTRY_HEIGHT,
+      top: startLocation,
+      behavior: "instant",
+    });
+
+    window.scrollTo({
+      top: endLocation,
       behavior: "smooth",
     });
   };
