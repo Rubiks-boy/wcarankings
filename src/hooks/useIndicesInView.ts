@@ -3,6 +3,8 @@ import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
+const EHHH_PRETTY_CLOSE = 300;
+const MIN_MS_BETWEEN_SCROLLS = 10;
 
 const calculateIndexOffset = () =>
   Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
@@ -16,6 +18,9 @@ const getScrollIndex = (index: number) =>
 export const useIndicesInView = () => {
   const scrollPageRef = useRef(0);
   const scrollIndexRef = useRef(calculateFirstIndex());
+  const scrollingToIndex = useRef<number | null>(null);
+  const lastScrollUp = useRef<number | null>(null);
+  const lastScrollDown = useRef<number | null>(null);
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
 
   const scrollToIndex = (index: number) => {
@@ -24,8 +29,12 @@ export const useIndicesInView = () => {
       newRankIndex = 0;
     }
 
+    // make sure we ignore any page jumps until we're within the scroll page.
+    scrollingToIndex.current = newRankIndex;
+
     window.scrollTo({
       top: SCROLL_BREAKPOINT,
+      behavior: "instant",
     });
     scrollPageRef.current = Math.max(
       Math.floor(newRankIndex / ENTRIES_PER_SCROLL_PAGE) - 1,
@@ -38,15 +47,46 @@ export const useIndicesInView = () => {
   };
 
   useEffect(() => {
-    const cb = () => {
-      // Past the first 100 items, we lock the scroll position between 101-200
-      const { scrollY } = window;
-      if (scrollY >= 2 * SCROLL_BREAKPOINT) {
+    // Do not allow the scroll page to increment/decrement
+    // within 15ms of the last time it was incremented/decrements
+    const incScrollPage = () => {
+      const currTime = new Date().getTime();
+      if (
+        lastScrollDown.current === null ||
+        currTime - lastScrollDown.current < MIN_MS_BETWEEN_SCROLLS
+      ) {
         scrollPageRef.current++;
         window.scroll({ top: scrollY - SCROLL_BREAKPOINT });
-      } else if (scrollY < SCROLL_BREAKPOINT && scrollPageRef.current >= 1) {
+      }
+      lastScrollDown.current = currTime;
+    };
+    const decScrollPage = () => {
+      const currTime = new Date().getTime();
+      if (
+        scrollPageRef.current >= 1 &&
+        (lastScrollUp.current === null ||
+          currTime - lastScrollUp.current < MIN_MS_BETWEEN_SCROLLS)
+      ) {
         window.scroll({ top: scrollY + SCROLL_BREAKPOINT });
         scrollPageRef.current--;
+      }
+      lastScrollUp.current = currTime;
+    };
+
+    const cb = () => {
+      // Past the first 1000 items, we lock the scroll position between 1001-2000
+      const { scrollY } = window;
+      if (scrollingToIndex.current !== null) {
+        // Once we've reached close to where we're trying to scroll to,
+        // restore the behavior of allowing page jumps
+        const targetScrollY =
+          getScrollIndex(scrollingToIndex.current) * ENTRY_HEIGHT;
+        Math.abs(targetScrollY - scrollY) < EHHH_PRETTY_CLOSE &&
+          (scrollingToIndex.current = null);
+      } else if (scrollY >= 2 * SCROLL_BREAKPOINT) {
+        incScrollPage();
+      } else if (scrollY < SCROLL_BREAKPOINT) {
+        decScrollPage();
       }
 
       const firstIndex = calculateFirstIndex();
