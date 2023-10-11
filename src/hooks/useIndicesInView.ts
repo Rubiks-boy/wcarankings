@@ -21,7 +21,7 @@ const currTime = () => new Date().getTime();
 export const useIndicesInView = () => {
   // State for what's currently on the screen
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
-  const [scrollIndex, setScrollIndex] = useState(0);
+  const [scrollIndex, setScrollIndex] = useState(calculateFirstIndex());
 
   // Refs used by the scroll event handler
   // These values get pushed to state
@@ -122,6 +122,8 @@ export const useIndicesInView = () => {
     window.addEventListener("scroll", cb);
     return () => window.removeEventListener("scroll", cb);
   }, []);
+
+  console.log({ rankIndex, scrollIndex });
 
   return {
     rankIndex,
