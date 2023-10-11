@@ -1,15 +1,9 @@
 import { ENTRY_HEIGHT } from "../constants";
 
-// Scrolls instantly to within 50 entries of toLoc, and then smooth scrolls
+// Scrolls instantly to within scrollDelta entries of toLoc, and then smooth scrolls
 // the rest of the way.
-export const performScroll = (toLoc: number) => {
-  const begLoc = window.scrollY;
-  const absDiff = Math.abs(toLoc - begLoc);
-  const isScrollingDown = toLoc > begLoc;
-  const scrollDelta =
-    (isScrollingDown ? 1 : -1) * Math.min(50 * ENTRY_HEIGHT, absDiff);
-
-  const intermediateLoc = toLoc - scrollDelta;
+export const performScroll = (toLoc: number, scrollDelta: number) => {
+  const intermediateLoc = toLoc - scrollDelta * ENTRY_HEIGHT;
   window.scrollTo({
     top: intermediateLoc,
     behavior: "instant",

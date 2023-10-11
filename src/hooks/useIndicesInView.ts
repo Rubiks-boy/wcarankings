@@ -54,7 +54,11 @@ export const useIndicesInView = () => {
     );
 
     const endLocation = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
-    performScroll(endLocation);
+    const scrollDelta = Math.min(
+      newRankIndex - rankIndex,
+      (newRankIndex > rankIndex ? 1 : -1) * 50
+    );
+    performScroll(endLocation, scrollDelta);
   };
 
   useEffect(() => {
