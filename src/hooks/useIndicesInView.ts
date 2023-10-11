@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 import { performScroll } from "../utils/scroll";
+import { currTime, callFuncOnce } from "../utils";
+import { useOnScrollStop } from "./useOnScrollStop";
 
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 const EHHH_PRETTY_CLOSE = 100; // 100 pixels
-const MIN_MS_BETWEEN_PAGE_SCROLLS = 100;
 
 const calculateIndexOffset = () =>
   Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
@@ -15,8 +16,6 @@ const calculateFirstIndex = (scrollY: number = window.scrollY) =>
 const getScrollIndex = (index: number) =>
   (index % ENTRIES_PER_SCROLL_PAGE) +
   (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
-
-const currTime = () => new Date().getTime();
 
 export const useIndicesInView = () => {
   // State for what's currently on the screen
@@ -34,7 +33,11 @@ export const useIndicesInView = () => {
   const scrollingToIndex = useRef<number | null>(null);
 
   // Time of the last time we attempted to jump up/down 1000 entries
-  const lastScrollJump = useRef<number | null>(null);
+  const lastScrollEvent = useRef<number | null>(null);
+
+  const pageJumpCb = useRef<(() => void) | null>(null);
+
+  useOnScrollStop(pageJumpCb);
 
   const scrollToIndex = (index: number) => {
     let newRankIndex = Math.max(index + calculateIndexOffset());
@@ -59,14 +62,12 @@ export const useIndicesInView = () => {
     const incScrollPage = () => {
       scrollPageRef.current++;
       window.scroll({ top: scrollY - SCROLL_BREAKPOINT });
-      lastScrollJump.current = currTime();
     };
 
     // Jumps the page down 1000 entries upon scrolling up too far
     const decScrollPage = () => {
       scrollPageRef.current--;
       window.scroll({ top: scrollY + SCROLL_BREAKPOINT });
-      lastScrollJump.current = currTime();
     };
 
     // Jumps up/down 1000 entries to make sure we always stay between
@@ -83,20 +84,16 @@ export const useIndicesInView = () => {
         return;
       }
 
-      // Do not allow the scroll page to increment/decrement
-      // within 15ms of the last time it was incremented/decrements
-      const canJumpPages =
-        lastScrollJump.current === null ||
-        currTime() - lastScrollJump.current >= MIN_MS_BETWEEN_PAGE_SCROLLS;
-      if (!canJumpPages) {
-        return;
-      }
-
       // Perform page jumps if we scroll out of range
+      // However, wait for the page to stop scrolling for 100ms.
+      // 1) This makes sure we don't call window.scrollTo() while
+      //    the user is actively scrolling.
+      // 2) It prevents issues where we might receive multiple scroll
+      //    events very quickly, which can mess with our state.
       if (scrollY >= 2 * SCROLL_BREAKPOINT) {
-        incScrollPage();
+        pageJumpCb.current = callFuncOnce(incScrollPage);
       } else if (scrollY < SCROLL_BREAKPOINT && scrollPageRef.current >= 1) {
-        decScrollPage();
+        pageJumpCb.current = callFuncOnce(decScrollPage);
       }
     };
 
@@ -117,6 +114,7 @@ export const useIndicesInView = () => {
     const cb = () => {
       jumpIfNeeded();
       syncScrollPosAndSetState();
+      lastScrollEvent.current = currTime();
     };
 
     window.addEventListener("scroll", cb);
