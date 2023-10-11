@@ -5,6 +5,7 @@ import type { ApiFields } from "../../types";
 
 import "./Row.css";
 import { useValueOnMount } from "../../hooks/useValueOnMount";
+import { NUM_ENTRIES_RENDERED } from "../../constants";
 
 export const Row = ({
   fields,
@@ -27,13 +28,14 @@ export const Row = ({
       className={classNames("listItem", { isLoading: !fields })}
       style={style}
     >
-      {wasLoadingOnMount && (
-        <div className="loader">
-          <div className="rank loaderBlob"></div>
-          <div className="name loaderBlob"></div>
-          <div className="best loaderBlob"></div>
-        </div>
-      )}
+      {wasLoadingOnMount ||
+        (rank < NUM_ENTRIES_RENDERED && (
+          <div className="loader">
+            <div className="rank loaderBlob"></div>
+            <div className="name loaderBlob"></div>
+            <div className="best loaderBlob"></div>
+          </div>
+        ))}
       <div className="row">
         <span className="rank">{rank}</span>
         <span className="name">{name}</span>
