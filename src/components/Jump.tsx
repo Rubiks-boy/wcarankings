@@ -30,12 +30,12 @@ const DownIcon = () => {
   );
 };
 
-export const JumpToTop = ({
+export const JumpUp = ({
   rankIndex,
-  scrollToTop,
+  scrollUpSome,
 }: {
   rankIndex: number;
-  scrollToTop: () => void;
+  scrollUpSome: () => void;
 }) => {
   return (
     <div
@@ -43,9 +43,9 @@ export const JumpToTop = ({
         visible: rankIndex > VISIBLE_AFTER_NUM_ENTRIES,
       })}
     >
-      <button className="Jump-button" onClick={scrollToTop}>
+      <button className="Jump-button" onClick={scrollUpSome}>
         <UpIcon />
-        <span>Jump to top</span>
+        <span>{rankIndex > 5000 ? "Jump up 5000" : "Jump to top"}</span>
         <UpIcon />
       </button>
     </div>

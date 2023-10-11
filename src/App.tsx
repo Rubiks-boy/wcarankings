@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { List } from "./components/List";
 import { Chooser } from "./components/Chooser";
-import { JumpDown, JumpToTop } from "./components/Jump";
+import { JumpUp, JumpDown } from "./components/Jump";
 import { useIndicesInView } from "./hooks/useIndicesInView";
 
 import "./App.css";
@@ -25,7 +25,10 @@ function App() {
         />
       </header>
       <main>
-        <JumpToTop rankIndex={rankIndex} scrollToTop={() => scrollToIndex(0)} />
+        <JumpUp
+          rankIndex={rankIndex}
+          scrollUpSome={() => scrollToIndex(rankIndex - 5000)}
+        />
         <List
           eventId={eventId}
           isSingle={isSingle}
