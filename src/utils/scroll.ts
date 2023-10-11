@@ -2,7 +2,7 @@
 // the rest of the way.
 import { ENTRY_HEIGHT } from "../constants";
 
-const MAX_SCROLL_DISTANCE = ENTRY_HEIGHT * 15;
+const MAX_SCROLL_DISTANCE = ENTRY_HEIGHT * 25;
 
 export const performScroll = ({
   toLoc,

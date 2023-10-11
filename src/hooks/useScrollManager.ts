@@ -57,14 +57,14 @@ export const useScrollManager = () => {
     const isScrollingDown = newRankIndex > rankIndex;
     const scrollDelta = Math.abs(newRankIndex - rankIndex) * ENTRY_HEIGHT;
     setForceLoading(true);
-    performScroll({
-      toLoc,
-      scrollDelta,
-      isScrollingDown,
-    });
     setTimeout(() => {
-      scrollStopCb.current = callFuncOnce(() => setForceLoading(false));
-    }, 150);
+      performScroll({
+        toLoc,
+        scrollDelta,
+        isScrollingDown,
+      });
+    }, 300);
+    scrollStopCb.current = callFuncOnce(() => setForceLoading(false));
   };
 
   useEffect(() => {
