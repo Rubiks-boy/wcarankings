@@ -5,7 +5,7 @@ import { performScroll } from "../utils/scroll";
 const BUFFER = 300;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 const EHHH_PRETTY_CLOSE = 100; // 100 pixels
-const MIN_MS_BETWEEN_PAGE_SCROLLS = 10;
+const MIN_MS_BETWEEN_PAGE_SCROLLS = 100;
 
 const calculateIndexOffset = () =>
   Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
@@ -16,10 +16,9 @@ const getScrollIndex = (index: number) =>
   (index % ENTRIES_PER_SCROLL_PAGE) +
   (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
 
-export const useIndicesInView = () => {
-  const lastScrollUp = useRef<number | null>(null);
-  const lastScrollDown = useRef<number | null>(null);
+const currTime = () => new Date().getTime();
 
+export const useIndicesInView = () => {
   // State for what's currently on the screen
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
   const [scrollIndex, setScrollIndex] = useState(0);
@@ -33,6 +32,9 @@ export const useIndicesInView = () => {
   // This makes sure the scrollToIndex window.scrollTo() events
   // take precedence over the logic to jump around pages.
   const scrollingToIndex = useRef<number | null>(null);
+
+  // Time of the last time we attempted to jump up/down 1000 entries
+  const lastScrollJump = useRef<number | null>(null);
 
   const scrollToIndex = (index: number) => {
     let newRankIndex = Math.max(index + calculateIndexOffset());
@@ -53,48 +55,52 @@ export const useIndicesInView = () => {
   };
 
   useEffect(() => {
-    // Do not allow the scroll page to increment/decrement
-    // within 15ms of the last time it was incremented/decrements
+    // Jumps the page up 1000 entries upon scrolling down too far
     const incScrollPage = () => {
-      const currTime = new Date().getTime();
-      if (
-        lastScrollDown.current === null ||
-        currTime - lastScrollDown.current < MIN_MS_BETWEEN_PAGE_SCROLLS
-      ) {
-        scrollPageRef.current++;
-        window.scroll({ top: scrollY - SCROLL_BREAKPOINT });
-      }
-      lastScrollDown.current = currTime;
-    };
-    const decScrollPage = () => {
-      const currTime = new Date().getTime();
-      if (
-        scrollPageRef.current >= 1 &&
-        (lastScrollUp.current === null ||
-          currTime - lastScrollUp.current < MIN_MS_BETWEEN_PAGE_SCROLLS)
-      ) {
-        window.scroll({ top: scrollY + SCROLL_BREAKPOINT });
-        scrollPageRef.current--;
-      }
-      lastScrollUp.current = currTime;
+      scrollPageRef.current++;
+      window.scroll({ top: scrollY - SCROLL_BREAKPOINT });
+      lastScrollJump.current = currTime();
     };
 
-    const cb = () => {
-      // Past the first 1000 items, we lock the scroll position between 1001-2000
+    // Jumps the page down 1000 entries upon scrolling up too far
+    const decScrollPage = () => {
+      scrollPageRef.current--;
+      window.scroll({ top: scrollY + SCROLL_BREAKPOINT });
+      lastScrollJump.current = currTime();
+    };
+
+    // Jumps up/down 1000 entries to make sure we always stay between
+    // 1001-2000 entries down from the top.
+    const jumpIfNeeded = () => {
+      // Once we've reached close to where we're actively trying to
+      // scroll to, restore the behavior of allowing page jumps
       const { scrollY } = window;
       if (scrollingToIndex.current !== null) {
-        // Once we've reached close to where we're trying to scroll to,
-        // restore the behavior of allowing page jumps
         const targetScrollY =
           getScrollIndex(scrollingToIndex.current) * ENTRY_HEIGHT;
         Math.abs(targetScrollY - scrollY) < EHHH_PRETTY_CLOSE &&
           (scrollingToIndex.current = null);
-      } else if (scrollY >= 2 * SCROLL_BREAKPOINT) {
-        incScrollPage();
-      } else if (scrollY < SCROLL_BREAKPOINT) {
-        decScrollPage();
+        return;
       }
 
+      // Do not allow the scroll page to increment/decrement
+      // within 15ms of the last time it was incremented/decrements
+      const canJumpPages =
+        lastScrollJump.current === null ||
+        currTime() - lastScrollJump.current >= MIN_MS_BETWEEN_PAGE_SCROLLS;
+      if (!canJumpPages) {
+        return;
+      }
+
+      // Perform page jumps if we scroll out of range
+      if (scrollY >= 2 * SCROLL_BREAKPOINT) {
+        incScrollPage();
+      } else if (scrollY < SCROLL_BREAKPOINT && scrollPageRef.current >= 1) {
+        decScrollPage();
+      }
+    };
+
+    const syncScrollPosAndSetState = () => {
       const firstIndex = calculateFirstIndex();
 
       if (firstIndex !== scrollIndexRef.current) {
@@ -106,6 +112,11 @@ export const useIndicesInView = () => {
           );
         });
       }
+    };
+
+    const cb = () => {
+      jumpIfNeeded();
+      syncScrollPosAndSetState();
     };
 
     window.addEventListener("scroll", cb);
