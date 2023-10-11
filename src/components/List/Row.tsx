@@ -4,6 +4,7 @@ import { CSSProperties } from "react";
 import type { ApiFields } from "../../types";
 
 import "./Row.css";
+import { useValueOnMount } from "../../hooks/useValueOnMount";
 
 export const Row = ({
   fields,
@@ -12,6 +13,7 @@ export const Row = ({
   fields: ApiFields | null;
   animationIndex: number;
 }) => {
+  const wasLoadingOnMount = useValueOnMount(!fields);
   const rank = useRetainValue(fields?.worldRank) ?? 0;
   const name = useRetainValue(fields?.person.name) ?? "";
   const id = useRetainValue(fields?.person.id) ?? "";
@@ -22,14 +24,16 @@ export const Row = ({
 
   return (
     <li
-      className={classNames("listItem", { isLoading: !fields || false })}
+      className={classNames("listItem", { isLoading: !fields })}
       style={style}
     >
-      <div className="loader">
-        <div className="rank loaderBlob"></div>
-        <div className="name loaderBlob"></div>
-        <div className="best loaderBlob"></div>
-      </div>
+      {wasLoadingOnMount && (
+        <div className="loader">
+          <div className="rank loaderBlob"></div>
+          <div className="name loaderBlob"></div>
+          <div className="best loaderBlob"></div>
+        </div>
+      )}
       <div className="row">
         <span className="rank">{rank}</span>
         <span className="name">{name}</span>
