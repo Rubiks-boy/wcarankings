@@ -15,7 +15,6 @@ export const useOnScrollStop = (
     const handleScroll = () => {
       resetTimeout();
       timeout.current = setTimeout(() => {
-        console.log("scroll stop");
         cb?.current?.();
       }, MIN_MS_BETWEEN_SCROLL_EVENTS);
     };

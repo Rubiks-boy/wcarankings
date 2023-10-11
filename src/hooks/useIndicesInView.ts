@@ -54,11 +54,10 @@ export const useIndicesInView = () => {
     );
 
     const endLocation = getScrollIndex(newRankIndex) * ENTRY_HEIGHT;
-    const scrollDelta = Math.min(
-      newRankIndex - rankIndex,
-      (newRankIndex > rankIndex ? 1 : -1) * 50
-    );
-    performScroll(endLocation, scrollDelta);
+    const isScrollingDown = newRankIndex > rankIndex;
+    const scrollDelta =
+      Math.min(Math.abs(newRankIndex - rankIndex), 50) * ENTRY_HEIGHT;
+    performScroll(endLocation, scrollDelta, isScrollingDown);
   };
 
   useEffect(() => {
@@ -124,8 +123,6 @@ export const useIndicesInView = () => {
     window.addEventListener("scroll", cb);
     return () => window.removeEventListener("scroll", cb);
   }, []);
-
-  console.log({ rankIndex, scrollIndex });
 
   return {
     rankIndex,

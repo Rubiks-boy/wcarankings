@@ -45,7 +45,7 @@ export const JumpUp = ({
     >
       <button className="Jump-button" onClick={scrollUpSome}>
         <UpIcon />
-        <span>{rankIndex > 5000 ? "Jump up 5000" : "Jump to top"}</span>
+        <span>{rankIndex > 5000 ? "Jump 5000" : "Jump to top"}</span>
         <UpIcon />
       </button>
     </div>
@@ -67,7 +67,7 @@ export const JumpDown = ({
     >
       <button className="Jump-button" onClick={scrollDownSome}>
         <DownIcon />
-        <span>Jump down 5000</span>
+        <span>Jump 5000</span>
         <DownIcon />
       </button>
     </div>
