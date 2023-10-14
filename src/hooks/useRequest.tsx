@@ -17,6 +17,7 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
   const controller = useRef<AbortController>();
   const inProgressRequests = useRef<Array<boolean>>([]);
   const [pages, setPages] = useState<Array<Page>>([]);
+  const [count, setCount] = useState<number>(Infinity);
   const type = isSingle ? "single" : "average";
 
   const requestPage = (page: number) => {
@@ -31,11 +32,13 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
 
     const url = `/rankings/${type}?eventId=${eventId}&p=${page}`;
     api.get(url, { signal: controller.current?.signal }).then((resp) => {
+      const { count } = resp.data;
       const entries = resp.data.results.map((e: ApiFields, i: number) => ({
         ...e,
         index: (page - 1) * PAGE_SIZE + i,
       })) as Array<FieldsWithIndex>;
 
+      count && setCount(count);
       setPages((pages) => {
         const newPages = [...pages];
         newPages[page] = entries.map((e, i) => ({
@@ -79,5 +82,5 @@ export const useRequest = (eventId: string, isSingle: boolean) => {
 
   useEffect(reset, [eventId, type]);
 
-  return { getEntries };
+  return { getEntries, count };
 };

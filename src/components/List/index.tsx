@@ -20,7 +20,8 @@ export const List = ({
   forceLoading: boolean;
   height: number;
 }) => {
-  const { getEntries } = useRequest(eventId, isSingle);
+  const { getEntries, count } = useRequest(eventId, isSingle);
+  const maxHeight = count * ENTRY_HEIGHT;
 
   let translateY = scrollIndex * ENTRY_HEIGHT;
   if (translateY < 0) {
@@ -30,20 +31,26 @@ export const List = ({
   const entries = getEntries(rankIndex, NUM_ENTRIES_RENDERED);
 
   return (
-    <div className="outerListWrapper" style={{ height }}>
+    <div
+      className="outerListWrapper"
+      style={{ height: Math.min(height, maxHeight) }}
+    >
       <div className="listContainer">
         <ol
           className="list"
           style={{ "--translateY": `${translateY}px` } as CSSProperties}
         >
-          {entries.map((maybeFields, i) => (
-            <Row
-              key={i + rankIndex}
-              animationIndex={i}
-              fields={maybeFields}
-              forceLoading={forceLoading}
-            />
-          ))}
+          {entries.map(
+            (maybeFields, i) =>
+              i + rankIndex < count && (
+                <Row
+                  key={i + rankIndex}
+                  animationIndex={i}
+                  fields={maybeFields}
+                  forceLoading={forceLoading}
+                />
+              )
+          )}
         </ol>
       </div>
     </div>
