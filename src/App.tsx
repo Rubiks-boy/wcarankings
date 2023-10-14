@@ -3,6 +3,7 @@ import { List } from "./components/List";
 import { Chooser } from "./components/Chooser";
 import { JumpUp, JumpDown } from "./components/Jump";
 import { useScrollManager } from "./hooks/useScrollManager";
+import { useRequest } from "./hooks/useRequest";
 
 import "./App.css";
 
@@ -11,6 +12,7 @@ function App() {
   const [isSingle, setIsSingle] = useState(true);
   const { rankIndex, scrollIndex, scrollToIndex, forceLoading, height } =
     useScrollManager();
+  const { getEntries, count } = useRequest(eventId, isSingle);
 
   const toggleSingle = () => setIsSingle(!isSingle);
 
@@ -31,16 +33,17 @@ function App() {
           scrollUpSome={() => scrollToIndex(rankIndex - 5000)}
         />
         <List
-          eventId={eventId}
-          isSingle={isSingle}
           rankIndex={rankIndex}
           scrollIndex={scrollIndex}
           forceLoading={forceLoading}
           height={height}
+          getEntries={getEntries}
+          count={count}
         />
         <JumpDown
           rankIndex={rankIndex}
           scrollDownSome={() => scrollToIndex(rankIndex + 5000)}
+          count={count}
         />
       </main>
     </div>

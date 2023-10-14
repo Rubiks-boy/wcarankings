@@ -1,26 +1,28 @@
-import { useRequest } from "../../hooks/useRequest";
 import { Row } from "./Row";
 import { CSSProperties } from "react";
 import { ENTRY_HEIGHT, NUM_ENTRIES_RENDERED } from "../../constants";
 
 import "./index.css";
+import { ApiFields } from "../../types";
 
 export const List = ({
-  eventId,
-  isSingle,
   rankIndex,
   scrollIndex,
   forceLoading,
   height,
+  getEntries,
+  count,
 }: {
-  eventId: string;
-  isSingle: boolean;
   rankIndex: number;
   scrollIndex: number;
   forceLoading: boolean;
   height: number;
+  getEntries: (
+    startIndex: number,
+    howMany: number
+  ) => Array<(ApiFields & { index: number }) | null>;
+  count: number;
 }) => {
-  const { getEntries, count } = useRequest(eventId, isSingle);
   const maxHeight = count * ENTRY_HEIGHT;
 
   let translateY = scrollIndex * ENTRY_HEIGHT;

@@ -55,19 +55,22 @@ export const JumpUp = ({
 export const JumpDown = ({
   rankIndex,
   scrollDownSome,
+  count,
 }: {
   rankIndex: number;
   scrollDownSome: () => void;
+  count: number;
 }) => {
   return (
     <div
       className={classNames("Jump", "Jump--down", {
-        visible: rankIndex > VISIBLE_AFTER_NUM_ENTRIES,
+        visible:
+          rankIndex > VISIBLE_AFTER_NUM_ENTRIES && rankIndex < count - 50,
       })}
     >
       <button className="Jump-button" onClick={scrollDownSome}>
         <DownIcon />
-        <span>Jump 5000</span>
+        <span>{rankIndex < count - 5000 ? "Jump 5000" : "Jump to end"}</span>
         <DownIcon />
       </button>
     </div>
