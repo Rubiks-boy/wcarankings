@@ -9,7 +9,7 @@ import "./App.css";
 function App() {
   const [eventId, setEventId] = useState("333");
   const [isSingle, setIsSingle] = useState(true);
-  const { rankIndex, scrollIndex, scrollToIndex, forceLoading } =
+  const { rankIndex, scrollIndex, scrollToIndex, forceLoading, height } =
     useScrollManager();
 
   const toggleSingle = () => setIsSingle(!isSingle);
@@ -36,6 +36,7 @@ function App() {
           rankIndex={rankIndex}
           scrollIndex={scrollIndex}
           forceLoading={forceLoading}
+          height={height}
         />
         <JumpDown
           rankIndex={rankIndex}

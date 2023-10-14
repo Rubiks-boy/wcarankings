@@ -1,16 +1,9 @@
 import { useRequest } from "../../hooks/useRequest";
 import { Row } from "./Row";
 import { CSSProperties } from "react";
-// import { useIndicesInView } from "../../hooks/useIndicesInView";
-import {
-  ENTRIES_PER_SCROLL_PAGE,
-  ENTRY_HEIGHT,
-  NUM_ENTRIES_RENDERED,
-} from "../../constants";
+import { ENTRY_HEIGHT, NUM_ENTRIES_RENDERED } from "../../constants";
 
 import "./index.css";
-
-const SCROLL_PAGE_HEIGHT = ENTRY_HEIGHT * ENTRIES_PER_SCROLL_PAGE;
 
 export const List = ({
   eventId,
@@ -18,12 +11,14 @@ export const List = ({
   rankIndex,
   scrollIndex,
   forceLoading,
+  height,
 }: {
   eventId: string;
   isSingle: boolean;
   rankIndex: number;
   scrollIndex: number;
   forceLoading: boolean;
+  height: number;
 }) => {
   const { getEntries } = useRequest(eventId, isSingle);
 
@@ -35,10 +30,7 @@ export const List = ({
   const entries = getEntries(rankIndex, NUM_ENTRIES_RENDERED);
 
   return (
-    <div
-      className="outerListWrapper"
-      style={{ height: 3 * SCROLL_PAGE_HEIGHT }}
-    >
+    <div className="outerListWrapper" style={{ height }}>
       <div className="listContainer">
         <ol
           className="list"

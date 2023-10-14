@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ENTRY_HEIGHT, ENTRIES_PER_SCROLL_PAGE } from "../constants";
 import { performScroll } from "../utils/scroll";
-import { currTime, callFuncOnce } from "../utils";
+import { callFuncOnce } from "../utils";
 import { useOnScrollStop } from "./useOnScrollStop";
 
 const BUFFER = 1000;
 const SCROLL_BREAKPOINT = ENTRIES_PER_SCROLL_PAGE * ENTRY_HEIGHT;
 const EHHH_PRETTY_CLOSE = 100; // 100 pixels
+const SCROLL_PAGE_HEIGHT = ENTRY_HEIGHT * ENTRIES_PER_SCROLL_PAGE;
 
 const calculateIndexOffset = () =>
   Math.floor((-1 * window.innerHeight) / ENTRY_HEIGHT / 3);
@@ -17,7 +18,8 @@ const getScrollIndex = (index: number) =>
   (index % ENTRIES_PER_SCROLL_PAGE) +
   (index >= ENTRIES_PER_SCROLL_PAGE ? ENTRIES_PER_SCROLL_PAGE : 0);
 
-export const useScrollManager = () => {
+// Locks user between indices 1000 to 3000
+export const useScrollManagerPaginated = () => {
   // State for what's currently on the screen
   const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
   const [scrollIndex, setScrollIndex] = useState(calculateFirstIndex());
@@ -32,9 +34,6 @@ export const useScrollManager = () => {
   // This makes sure the scrollToIndex window.scrollTo() events
   // take precedence over the logic to jump around pages.
   const scrollingToIndex = useRef<number | null>(null);
-
-  // Time of the last time we attempted to jump up/down 1000 entries
-  const lastScrollEvent = useRef<number | null>(null);
 
   const scrollStopCb = useRef<(() => void) | null>(null);
   useOnScrollStop(scrollStopCb);
@@ -122,7 +121,6 @@ export const useScrollManager = () => {
     const cb = () => {
       jumpIfNeeded();
       syncScrollPosAndSetState();
-      lastScrollEvent.current = currTime();
     };
 
     window.addEventListener("scroll", cb);
@@ -134,5 +132,65 @@ export const useScrollManager = () => {
     scrollIndex,
     scrollToIndex,
     forceLoading,
+    height: 3 * SCROLL_PAGE_HEIGHT,
   };
 };
+
+// Allows the user to scroll down endlesslly
+export const useScrollManagerNonPaginated = () => {
+  // State for what's currently on the screen
+  const [rankIndex, setRankIndex] = useState(calculateFirstIndex());
+  const [forceLoading, setForceLoading] = useState(false);
+  const [height, setHeight] = useState(3 * SCROLL_PAGE_HEIGHT);
+
+  // Ref used by the event handler that get pushed to state
+  const rankIndexRef = useRef(calculateFirstIndex());
+
+  const scrollStopCb = useRef<(() => void) | null>(null);
+  useOnScrollStop(scrollStopCb);
+
+  const scrollToIndex = (index: number) => {
+    let newRankIndex = Math.max(index + calculateIndexOffset());
+    if (newRankIndex < 0) {
+      newRankIndex = 0;
+    }
+
+    const toLoc = newRankIndex * ENTRY_HEIGHT;
+    const isScrollingDown = newRankIndex > rankIndex;
+    const scrollDelta = Math.abs(newRankIndex - rankIndex) * ENTRY_HEIGHT;
+    setForceLoading(true);
+    setHeight(Math.max(height, toLoc + SCROLL_PAGE_HEIGHT));
+    setTimeout(() => {
+      performScroll({
+        toLoc,
+        scrollDelta,
+        isScrollingDown,
+      });
+    }, 300);
+    scrollStopCb.current = callFuncOnce(() => setForceLoading(false));
+  };
+
+  useEffect(() => {
+    const cb = () => {
+      const firstIndex = calculateFirstIndex();
+
+      if (firstIndex !== rankIndexRef.current) {
+        rankIndexRef.current = firstIndex;
+        setRankIndex(firstIndex);
+      }
+    };
+
+    window.addEventListener("scroll", cb);
+    return () => window.removeEventListener("scroll", cb);
+  }, []);
+
+  return {
+    rankIndex,
+    scrollIndex: rankIndex,
+    scrollToIndex,
+    forceLoading,
+    height,
+  };
+};
+
+export const useScrollManager = useScrollManagerNonPaginated;
